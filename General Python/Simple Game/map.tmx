@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+  <image source="../../Tiles/tileset/grass-tiles-2-small.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="73" name="Triggers" tilewidth="32" tileheight="32">
+  <image source="../r1chardj0n3s-pygame-tutorial-d27e939a73bd/triggers.png" width="192" height="32"/>
+ </tileset>
+ <layer name="set" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzVmVFPGzEQhJ22kAdUAuVOiBRohUQLCCpVVdVH1P//p+pVvdJmtHu3ju34eBgJJbk7f5nZ9TochRCuFqItyHvdcdTnqF9Cq6gneC1H7xSdCmnvl+oaOIjhU9RF1Dms78TJcdpBD4JjlUQeraPGxLJJn70U162E5Gs9GJBDY1knlql79Fy/xSG/6+PkCbM8ZTKcdObg9VH93CSewfBGyxfr0vH81hykj0KYs29Rfw2mpeRK5oU5npMnI3izgc/3YtE4MNfSE2aR3mh1Y+m3olYcU7mWLMxzF/VF+az0pva6vbmakqx9mbHcfnYIjrnn/wFvhuSLVvs9OTz6oLCcA4vFUXtvKeGQLKOQzNhb8ENKssjZrBeHlwXXR75sw+4swyxYM605Su5DXGfh/8w/BjtnrTlq3IsZjsLu7D+1xyyNQ/rA99Pqn+ayTYXn1ebALJEX79N7spetwy5PbZZSjmuDgaXtMS1qZl+O16jH5AXPJ9Z9rF5Ws2b25ZBZGgwv5nhq1sw+HDJLVp6mRGeZF/geSntNDsdZ+u6wrm/3eC7OM6X1ksOBPowZ13pYSurFyyH7K3mwTT7k5MmTMfLlPuTXi5eDvLio4IEmOpfxb7TIg6Jca/nL4RgTy/fKHCTu4ZjbQXmNhPnzcGCmSrOE+mqs1WLQMuHhYC/WTu9ypfUP7Ou475RwkFpk6mHGB1of/2+gFkdtP6wzizYnazO1XGNPjrlMeevDyzEY15eK9kLsuR5hvnvnCnmwnq26x565hH5lMVn/B9X6vpejVa5qKTdXLc6kPTjmWKiP8hxkzUK9OHi+lr/jyN/X+Fwie3yLs2spB7LwGvk66deg/H2Imso5R+H5Wttn+TeHJXOwtD0Y117rzNiSA32Zmq9/hPpzfi0OKVn/XN+crRZnlVYcU3vvzwMx1OBYioiD+85bFvXMf9JBquc=
+  </data>
+ </layer>
+ <objectgroup name="triggers" width="50" height="50" visible="0">
+  <object name="Top of Screen" x="-45" y="2" width="1920" height="20">
+   <properties>
+    <property name="blockers" value="tblr"/>
+   </properties>
+  </object>
+  <object name="Left of Screen" x="2" y="-96" width="20" height="1920">
+   <properties>
+    <property name="blockers" value="tblr"/>
+   </properties>
+  </object>
+  <object name="Right of Screen" x="1577" y="-87" width="20" height="1920">
+   <properties>
+    <property name="blockers" value="tblr"/>
+   </properties>
+  </object>
+  <object name="Bottom of Screen" x="-118" y="1579" width="1920" height="20">
+   <properties>
+    <property name="blockers" value="tblr"/>
+   </properties>
+  </object>
+  <object name="player" gid="73" x="159" y="130">
+   <properties>
+    <property name="player" value=""/>
+   </properties>
+  </object>
+  <object name="Win box" gid="75" x="1312" y="1057">
+   <properties>
+    <property name="win" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

@@ -1,0 +1,445 @@
+Python Core Bug Tracker Issues
+    Patches Accepted: 2
+    7/19/2014 webbrowser module debug (8232) (status: patch submitted after reviewed)
+        Overview
+            Issue was reported that on windows systems the specification to open a 
+            new window or open a new tab with the open functions was being ignored. The 
+            system would only open in one manner determined by the default functionality
+            of the specific browser.
+
+            Upon inspection the webbrowser module attempts to build a list of 
+            browsers present on the system and use those with the url. To build this list,
+            the module checks for the presence of browsers by passing different browser
+            names as strings to the shutil.which() function. The shutil.which function
+            should return the path to a given file name and return None if the file is not
+            present. I have found that this function on windows does not work unless the
+            whole file path is given to it. This causes the list of browsers present to
+            not be built correctly. It will only add windows default and internet 
+            explorer to that list (the list being _tryorder). 
+
+            The get function for the webbrowser module then attempts to find a 
+            user specified browser in the _browsers dictionary which is built alongside
+            the _tryorder list. This causes errors in obtaining a specific browser. If
+            no browser is specified, the WindowsDefault class is used.
+
+            The open function for the Windows default class uses os.startfile() and
+            did not include usage of the "new" input which was included to specify between
+            new windows and new tabs for the given url. 
+        Patch submission - 8/4/2014
+			To have the WindowsDefault class make use of the "new" input I changed
+			the open method to build a command string to send to subprocess.call(). By
+			building a command string I was able to pass flags for a new window or a 
+			new tab.
+
+				def open(self, url, new=0, autoraise=True):
+					# Format the command for optional arguments and add the url
+					if new == 1:
+						self.cmd += " " + self.newwindow
+					elif new == 2:
+						self.cmd += " " + self.newtab
+					self.cmd += " " + url
+					try:
+						subprocess.call(self.cmd,shell = True)
+					except OSError:
+						# [Error 22] No application is associated with the specified
+						# file for this operation: '<URL>'
+						return False
+					else:
+						return True
+				
+			I added the cmd, newwindow, and newtab attributes to the WindowsDefault
+			class. I then overwrote these attributes with subclassing for specific 
+			browsers so that their specific flags could be used. This method of 
+			subclassing was made to replicate the way the Unix browsers were implemented.
+
+				# Windows Sub-Classes
+				class InternetExplorer(WindowsDefault):
+					cmd = "start iexplore.exe"
+					newwindow = ""
+					newtab = ""
+
+
+				class WinChrome(WindowsDefault):
+					cmd = "start chrome.exe"
+					newwindow = "-new-window"
+					newtab = "-new-tab"
+
+
+				class WinFireFox(WindowsDefault):
+					cmd = "start firefox.exe"
+					newwindow = "-new-window"
+					newtab = "-new-tab"
+
+			Through inheritance these classes are able to use the command line 
+			building open statement from the WindowsDefault class while creating their
+			own browser specific flags.
+			
+			The get function was altered and hard coded to return these Windows 
+			subclasses on Windows specific systems because of the error in building the
+			_browsers dictionary.
+
+				def get(using=None):
+					"""Return a browser launcher instance appropriate for the environment."""
+					# Let the windows default class handle different browsers on windows
+					if sys.platform[:3] == "win":
+						if using == None:
+							return WindowsDefault("windows-default")
+						else:
+							# If a browser name was entered try to return its associated subclass
+							using = using.lower()
+							if using == "internet explorer" or using == "iexplore":
+								return InternetExplorer("iexplore")
+							elif using == "chrome":
+								return WinChrome("chrome")
+							elif using == "firefox":
+								return WinFireFox("firefox")
+							else:
+								raise Error("The browser you entered (%s) is not currently supported on windows" % using)
+
+			These sets of code changes allow new-window and new-tab specifications
+			to be met on Windows platforms, however, they only support internet explorer,
+			chrome, and firefox.
+        Patch submission - 5/27/2015
+            The additions to the WindowsDefault.open were kept from the last submission. The
+            open method will still build a string to send to the command line using subprocess.call().
+            
+				def open(self, url, new=0, autoraise=True):
+					# Format the command for optional arguments and add the url
+					if new == 1:
+						self.cmd += " " + self.newwindow
+					elif new == 2:
+						self.cmd += " " + self.newtab
+					self.cmd += " " + url
+					try:
+						subprocess.call(self.cmd,shell = True)
+					except OSError:
+						# [Error 22] No application is associated with the specified
+						# file for this operation: '<URL>'
+                        return False
+                    else:
+                        return True
+                        
+            The subclassing of the WindowsDefault class was kept too and support was addeed for 
+            the seamonkey and opera browsers.
+            
+                # Windows Sub-Classes for commonly used browsers
+                class InternetExplorer(WindowsDefault):
+                    cmd = "start iexplore.exe"
+                    newwindow = ""
+                    newtab = ""
+
+                class WinChrome(WindowsDefault):
+                    cmd = "start chrome.exe"
+                    newwindow = "-new-window"
+                    newtab = "-new-tab"
+
+                class WinFireFox(WindowsDefault):
+                    cmd = "start firefox.exe"
+                    newwindow = "-new-window"
+                    newtab = "-new-tab"
+
+                class WinOpera(WindowsDefault):
+                    cmd = "start opera"
+                    newwindow = ""
+                    newtab = ""
+
+                class WinSeaMonkey(WindowsDefault):
+                    cmd = "start seamonkey"
+                    newwinow = ""
+                    newtab = ""
+                    
+            The newest addition is to how the browser list is built. Mentioned in comments 
+            on the bugtracker is that windows stores the browsers on the machine in the 
+            registry. Using the module for registry tools on windows, winreg, I was able to 
+            determine what browsers are on the machine. The code to set up the registry tools
+            is put above the WindowsDefault class and includes a test to see if the 32 bit 
+            registry is different from the 64 bit registry.
+            
+                # Access the windows registry to later determine what browsers are on the system
+                import winreg
+                HKLM = winreg.HKEY_LOCAL_MACHINE
+                subkey = r'Software\Clients\StartMenuInternet'
+                read32 = winreg.KEY_READ | winreg.KEY_WOW64_32KEY
+                read64 = winreg.KEY_READ | winreg.KEY_WOW64_64KEY
+                key32 = winreg.OpenKey(HKLM, subkey, access=read32)
+                key64 = winreg.OpenKey(HKLM, subkey, access=read64)
+                # This should be true in Windows 7. This will produce an error if the 32 bit
+                # key is different than the 64 bit key
+                assert winreg.QueryInfoKey(key32) == winreg.QueryInfoKey(key64)
+                
+            The module then uses its register function for the browsers found in the registry. Specific
+            browsers are directed to their subclasses defined above. 
+            
+                # Detect some common Windows browsers
+                browsers = [winreg.EnumKey(key64,i) for i in range(winreg.QueryInfoKey(key64)[0])]
+                for browser in browsers:
+                    browser = browser.lower()
+                    if "iexplore" in browser:
+                        register("iexplore",None,InternetExplorer("iexplore"))
+                    elif "chrome" in browser:
+                        register("chrome",None,WinChrome("chrome"))
+                    elif "firefox" in browser:
+                        register("firefox",None,WinFireFox("firefox"))
+                    elif "opera" in browser:
+                        register("opera",None,WinOpera("opera"))
+                    elif "seamonkey" in browser:
+                        register("seamonkey",None,WinSeaMonkey("seamonkey"))
+                    else:
+                        register(browser, None, WindowsDefault(browser))
+
+            The browsers list is built by enumerating across the keys on the path using the query function
+            to determine the number of keys to iterate across.
+            
+            This patch now allows access to specificed browsers and differentiation between new tabs and new
+            windows for the browsers that allow it.
+        Patch submission - 5/28/2015
+            This is exactly the same as the last patch except I removed the assert statement in order to properly
+            add support for the Vista operating system or any windows system that keeps the 32 bit browsers separate
+            from the 64 bit browsers. This was done using a set union so that the browsers could be added from both
+            locations and duplicates ignored.
+            
+                browsers = set([winreg.EnumKey(key32,i) for i in range(winreg.QueryInfoKey(key32)[0])])
+                browsers = browsers|set([winreg.EnumKey(key64,i) for i in range(winreg.QueryInfoKey(key64)[0])])
+        Patch submission - 6/1/2015
+            Same functionality of the previous patch. Changed formatting to better adhere to the PEP8 style guide
+        Patch reviewed - 6/3/2015
+            The last patch was reviewed and the following comments were made. It was asked that the windows
+            registry keys be opened much closer to where they were going to be used, that they be closed after
+            being used and that the registry access code be put in a function to limit the scope of the 
+            registry variables. There was a spot that might have had a mixture of tabs and spaces. Instead of
+            using winreg.QueryInfoKey(key)[0] to determine the keys on the system it was suggested that I 
+            simply increment the index until it fails. The reviewer suggested using lists instead of sets to 
+            hold the browsers and pointed out some missing spaces after commas in the section where common 
+            browsers are identified.
+        Patch submission - 6/4/2015
+            This patch is built on the previous patch to address the changes suggested from the patch review.
+            To begin the registry code was moved inside a function (find_windows_browsers) where the formation
+            of the browsers list was also changed to provide iteration until error rather than using QueryInfoKey.
+            Also the browsers were put into a list instead of a set this time and the keys were closed after they
+            were done being used.
+            
+                def find_windows_browsers():
+                    """ Access the windows registry to determine
+                    what browsers are on the system.
+                    """
+
+                    import winreg
+                    HKLM = winreg.HKEY_LOCAL_MACHINE
+                    subkey = r'Software\Clients\StartMenuInternet'
+                    read32 = winreg.KEY_READ | winreg.KEY_WOW64_32KEY
+                    read64 = winreg.KEY_READ | winreg.KEY_WOW64_64KEY
+                    key32 = winreg.OpenKey(HKLM, subkey, access=read32)
+                    key64 = winreg.OpenKey(HKLM, subkey, access=read64)
+
+                    # Return a list of browsers found in the registry
+                    # Check if there are any different browsers in the
+                    # 32 bit location instead of the 64 bit location.
+                    browsers = []
+                    i = 0
+                    while True:
+                        try:
+                            browsers += [winreg.EnumKey(key32,i)]
+                            browsers += [winreg.EnumKey(key64,i)]
+                        except EnvironmentError:
+                            break
+                        i += 1
+
+                    winreg.CloseKey(key32)
+                    winreg.CloseKey(key64)
+
+                    return browsers
+                    
+            The spot of a mixture of tabs and spaces was fixed along with the missing spaces in the common
+            browsers section.
+        Patch reviewed - 6/5/2015
+            The reviewer pointed out that the 32 bit and 64 bit browser lists might be different sizes and so they
+            should be in their own separate loops. Also it was suggested that I use browsers.append instead of +=
+        Patch submission - 6/7/2015
+            Moved the 64 bit browser list to its own while loop in case there is a different number of browser keys
+            between the 32 bit and 64 bit locations. Also instead of adding to the list using += I switched it to
+            browsers.append()
+        Summary:
+            - Issue created because the webbrowser module did not open new windows or
+            .    new tabs based on the user input as the documentation indicated that
+            .    it should
+            - List of available browsers and the corresponding dictionary with the 
+            .    browser classes not built correctly (_tryorder and _browsers)
+            .   - Due to using shutil.which() not returning a pathname for a string
+            .       with a file name
+            - WindowsDefault class makes no use of the "new" argument in its open 
+            .    function
+            
+            Patch submission - 8/4/2014
+            - Altered the WindowsDefault class to make use of the "new" argument and
+            .    build a command string to be passed to subprocess.call()
+            - Added WindowsDefault subclassing for the correct new window and new tab
+            .    flags to be browser specific attributes
+            - Hard coded the get() function for windows platforms for chrome, internet
+            .    explorer, and firefox
+            
+            Patch submission - 5/27/2015
+            - Kept the altering of the WinowsDefault class
+            - Kept the WindowsDefault subclassing for chrome and firefox and added 
+            .    subclasses for the seamonkey and opera web browsers.
+            - Used the winreg module to properly build a list of browsers that are on
+            .    the machine because it accesses the windows registry.
+            - Took out the hardcoding of the get() function
+            
+            Patch submission - 5/28/2015
+            - Took out the assert error and built the browsers list using set union of
+            .    32 bit and 64 bit locations.
+            
+            Patch submission - 6/1/2015
+            - Fixed formatting to match PEP8
+            
+            Patch review - 6/3/2015
+            - Open and close the registry keys in a function closer to where they are being
+            .    used
+            - Fix the mix of tabs and spaces
+            - Iterate over EnumKey until failure instead of using QueryInfoKey
+            - Use a list instead of a set to hold the browsers
+            - Missing spaces after commas
+            
+            Patch submission - 6/4/2015
+            - The registry code was moved inside a function, the registry keys were closed
+            .    properly and the browser list was built by iterating EnumKey until it failed.
+            - Minor formatting errors were corrected
+            
+            Patch review - 6/5/2015
+            - The 32 bit an 64 bit browser keys may be different in length and therefore need
+            .    to be in their own loops
+            - It was suggested that instead of using += for building the list that the append
+            .    method be used
+            
+            Patch submission - 6/7/2015
+            - Moved the 64 bit browser additions to their own loop and use the append method now.
+    5/28/2015 csv.register_dialect docstring change (23659) (status: patch accepted)
+        Overview
+            The docstring for register_dialect in the csv module has left out that the dialect
+            input is optional and that additional format parameters can be passed to the function.
+            This doc string was actually located in _csv.c, the C code file for the csv module.
+        Patch submission - 5/28/2015
+            Changed the docstring to match the appearance of the documentation. The original docstring
+            was
+                
+                "Create a mapping from a string name to a dialect class.\n"
+                "    dialect = csv.register_dialect(name, dialect)"
+                
+            and I changed it to
+            
+                "Create a mapping from a string name to a dialect class.\n"
+                "    dialect = csv.register_dialect(name[, dialect], **fmtparams)"
+        Summary:
+            - The docstring of csv.register_dialect did not fully reflect all input arguments.
+            - Doc string found in the C code file _csv.c
+            
+            Patch submission - 5/28/2015
+            - Made the inputs to the function in the docstring match the documentation online.
+            
+            Patch has been accepted and added
+    5/29/2015 csv dialect documentation clarification (24147) (status: patch submitted)
+        Overview
+            The csv module has a Dialect class that specifies how the reader should interpret
+            the comma separated file (.csv). The defaults for all of the attributes of the
+            Dialect class are None but the documentation shows other values as being defaults.
+            This is because the Dialect class is not the default dialect used by the csv
+            module, but rather the excel dialect is default and its attributes are the ones 
+            shown. This creates confusion when directly sub-classing the Dialect class because
+            the user would assume the defaults shown in the documentation are the defaults 
+            they are going to get, when in reality all of the defaults are None.
+        Patch submission - 5/29/2015
+            In order to clarify the defaults shown are for excel I added the following sentences
+            to the paragraph under "Dialects and Formatting Parameters".
+            
+                Note that the default values given
+                for the attributes below are for the :class:`excel` dialect, not the :class:`Dialect`
+                class itself, because :class:`excel` is the default dialect used by the :mod:`csv`
+                module. When subclassing the :class:`Dialect` class, all of the following attributes
+                should be specified by your subclass because :class:`Dialect` defaults them all to
+                :const:`None`.
+                
+            This should help clarify that the default parameters listed are for the excel dialect 
+            and that sub-classes should explicitly define all of the parameters when inheriting 
+            from the Dialect class
+        Summary:
+            - The documentation of the csv module lists the default parameters for the
+            .    excel dialect instead of the parent Dialect class but does not make 
+            .    this clarification. (The Dialect class defaults all parameters to None)
+            
+            Patch submission - 5/29/2015
+            - Added a few sentences to the paragraph under "Dialects and Formatting 
+            .    Parameters" to help clarify that the defaults shown are for the excel
+            .    dialect and not the parent Dialect class
+            - Also mentioned that the attributes need to be specified when sub-classing
+            .    because the parent Dialect class defaults all the parameters to None.
+    5/29/2015 csv skipinitialspace documentation fix (21297) (status: patch reviewed)
+        Overview
+            The documentation for skipinitialspace in the csv module has vague wording. It says
+            that, when True, leading whitespace in the values will be ignored. Upon inspection,
+            however, it ignores spaces but not other whitespace characters such as tab (/t).
+            Also theres a location describing how it works by saying that it "ignore[s] space
+            at start of field" and so this could cause confusion as to whether or not it ignores
+            multiple spaces or just a single space.
+        Patch submission - 5/29/2015
+            I changed the locations in the csv.rst file that mention white space to say just space,
+            with necessary grammer changes as well.
+            
+                When :const:`True`, spaces immediately following the *delimiter* are ignored.
+                
+            I also changed the _csv.c file so that it says spaces instead of whitespace.
+            
+                "    * skipinitialspace - specifies how to interpret spaces which\n"
+                "        immediately follow a delimiter.  It defaults to False, which\n"
+                "        means that spaces immediately following a delimiter are part\n"
+                "        of the following field.\n"
+                
+            Lastly I changed the spot in _csv.c where it said that it ignored space to ignore spaces
+            to clarify that it ignores all leading spaces in a field, not just one.
+            
+                /* ignore spaces at start of field */
+                
+            These changes should help clarify that the skipinitialspace attribute only applies to 
+            spaces not all general whitespace.
+        Patch reviewed - 6/5/2015
+            The reviewer liked the documentation fix and requested that I convert my test script to 
+            a test case and add it in Lib/test/test_csv.py.
+        Summary:
+            - References to whitespace in the csv module documentation for skipinitialspace were
+            .    misleading because it would only skip spaces not general whitespace like tabs (\t)
+            - Spot in _csv.c mentioned ignore space which led to confusion as to the number of
+            .    spaces that were ignored.
+            
+            Patch submission - 5/29/2015
+            - Changed the whitespace references in csv.rst to spaces
+            - Changed the whitespace references in _csv.c to spaces
+            - Changed the ignore space wording in _csv.c to ignore spaces
+            
+            Patch review - 6/5/2015
+            - The patch was liked and it was requested that I convert my test script to a test in
+            .    the test_csv.py file.
+    6/1/2015 custom stdout object needing a flush method (12020) (status: clarification requested)
+        Overview
+            The problem is that, upon exit of the script, whatever is designated the sys.stdout will
+            be attempted to be flushed. If the object does not have a flush method then an error is 
+            raised but the script will still be able to be run. The documentation of the stdout is not
+            explicit on any methods that the object will need to have and so I recommended that a 
+            required subset of methods be defined for stdout objects and have asked what methods in 
+            addition to flush() should be defined.
+        Summary:
+            - stdout raises an error if it does not have a flush method because it will try to flush
+            .    when the script exits.
+    6/4/2015 p.sort_stats example fix under profile.rst (24148) (status: patch accepted)
+        Overview
+            In the documentation for profile.rst there is an example that uses the keyword 'cum' for
+            the sort_stats method. The problem is that this is not one of the available keywords for
+            the method.
+        Patch submission - 6/4/2015
+            The incorrect keyword 'cum' is changed to 'cumulative' to match an earlier example.
+        Summary
+            - The documentation under profile.rst uses an incorrect keyword, 'cum' for the sort_stats
+            .    method example
+            
+            Patch submission - 6/4/2015
+            - Changed the incorrect keyword to 'cumulative'
+            
+            Patch has been accepted and added

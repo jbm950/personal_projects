@@ -1,0 +1,72 @@
+diff -r 118d6f49d6d6 Lib/webbrowser.py
+--- a/Lib/webbrowser.py	Fri Aug 01 17:49:24 2014 +0200
++++ b/Lib/webbrowser.py	Mon Aug 04 21:51:08 2014 -0500
+@@ -26,6 +26,21 @@
+ 
+ def get(using=None):
+     """Return a browser launcher instance appropriate for the environment."""
++    # Let the windows default class handle different browsers on windows
++    if sys.platform[:3] == "win":
++        if using == None:
++            return WindowsDefault("windows-default")
++        else:
++            # If a browser name was entered try to return its associated subclass
++            using = using.lower()
++            if using == "internet explorer" or using == "iexplore":
++                return InternetExplorer("iexplore")
++            elif using == "chrome":
++                return WinChrome("chrome")
++            elif using == "firefox":
++                return WinFireFox("firefox")
++            else:
++                raise Error("The browser you entered (%s) is not currently supported on windows" % using)
+     if using is not None:
+         alternatives = [using]
+     else:
+@@ -503,9 +518,19 @@
+ 
+ if sys.platform[:3] == "win":
+     class WindowsDefault(BaseBrowser):
++        # Windows Default opening arguments
++        cmd = "start"
++        newwindow = ""
++        newtab = ""
+         def open(self, url, new=0, autoraise=True):
++            # Format the command for optional arguments and add the url
++            if new == 1:
++                self.cmd += " " + self.newwindow
++            elif new == 2:
++                self.cmd += " " + self.newtab
++            self.cmd += " " + url
+             try:
+-                os.startfile(url)
++                subprocess.call(self.cmd,shell = True)
+             except OSError:
+                 # [Error 22] No application is associated with the specified
+                 # file for this operation: '<URL>'
+@@ -513,6 +538,25 @@
+             else:
+                 return True
+ 
++    # Windows Sub-Classes
++    class InternetExplorer(WindowsDefault):
++        cmd = "start iexplore.exe"
++        newwindow = ""
++        newtab = ""
++
++
++    class WinChrome(WindowsDefault):
++        cmd = "start chrome.exe"
++        newwindow = "-new-window"
++        newtab = "-new-tab"
++
++
++    class WinFireFox(WindowsDefault):
++        cmd = "start firefox.exe"
++        newwindow = "-new-window"
++        newtab = "-new-tab"
++
++
+     _tryorder = []
+     _browsers = {}
+ 

@@ -1,0 +1,301 @@
+Meeting Notes
+	10/22/2014
+		Aaron gave introduction
+		Other member talked about working with computer vision at a unmanned drone
+		competition
+	11/5/2014
+		Attendance: 4 members
+	
+		The meeting opened with a review of the previous meeting and events that 
+		have occured since the previous meeting. This meeting largely covered the 
+		topic or what is an unmanned system and what are some of it's defining 
+		characteristics.
+		
+		MMRCA Fun Fly was a success with an attendance of around 20-25 people. There
+		were lots of helicopters and multirotors present and was an overall enjoyable
+		experience. For those interested the group meets every third Wednesday of the
+		month at Shakespeare's Pizza.
+		
+		MUST is still holding a design competition for an icon to be put on orgsnyc 
+		and to represent the team as a decal on competition platforms. The winner of
+		the competition will win an unmanned system from www.amazon.com. (system 
+		chosen through discussion between the winner and Aaron)
+		
+		News of Unmanned Systems over the past two weeks
+			Michigan Police select the Aeryon SkyRanger to be used as their unmanned
+			system across all of their counties statewide.
+			
+			Driverless Car Bill passes in New Jersey. The bill recognizes the legality
+			of autonomous vehicle testing and operations in the state.
+			
+			A grant was given to the University of California, Berkeley to develop a 
+			next generation surgical robot.
+			
+			UAV's are banned in India until a proper system of managing them can be 
+			established.
+			
+			More stories and other unmanned systems information can be found at
+			auvsi.org
+		
+		The meeting next addressed the definition of an unmanned system. An unmanned
+		system is defined as a system without a human pilot or passenger such as a 
+		paper airplane or a microwave. The unmanned systems will vary from one another
+		by their degree of autonomy or the amount of required human input. For example
+		does the system start up, run/operate or stop autonomously or are human inputs
+		required for these functions. The level of autonomy of the system is dependant
+		on two major factors, the autopilot or controller used and the vehicle 
+		software/hardware. The autopilot is the more important of these two factors and
+		is the primary interface to the unmanned system.
+		
+		The accessibility and availability of unmanned systems was the next topic of 
+		discussion. There are many sites from which to purchase unmanned systems but 
+		they generally are found in four basic formats. Kits that have to be completely
+		assembled, almost ready to fly (ARF), bind and fly (BNF) which includes a 
+		reciever and ready to fly (RTF) which has all of the components that are required
+		for flight with minimal assembly. The benefits of this accessibility is that it 
+		is easy to get started with unmanned systems, there are plenty of platforms to 
+		choose from and replacement parts are relatively inexpensive. The cons are that 
+		customer service and product quality vary as widely as the variety of avaliable 
+		platforms, the BNF and RTF systems lead to not fully understanding the hardware 
+		of the unmanned system and their affordability leads to unqualified people 
+		purchasing and possibly crashing the systems leading to overall negativity in the
+		view of the hobby to the media and the general public. 
+		
+		This last point was demonstrated with a video of a multirotor being crashed into 
+		an observer in a crowded set of stands. Such failures are not always operator error
+		and can result from multiple causes such as loss of communication from the operator
+		to the system, a low battery or a hardware failure, however, the media will not care
+		and so the need to operate safely should be stressed in order to avoid furthering a
+		negative stereotype of the hobby in the media. When operating an unmanned system one
+		always needs to be conscious of what could happen and have a plan in the event that
+		something negative does happen.
+		
+		Another important point of consideration is that certain modules or configurations
+		that are legal in one country are not necessarily legal in another country. Different
+		countries have different reserved frequencies for use and this has to be carefully 
+		considered during the design phase of a project because interfereing with these 
+		reserved frequencies can lead to fines or even jail time.
+		
+		Another note regarding legal restrictions pertains to the FAA (Federal Aviation
+		Administration). The FAA is an advisory administration on regulations for civilian
+		aviation to legislative bodies. It should be noted that the FAA does not have the power
+		to make laws themselves, however, they are a trusted administration by the legislative 
+		branch of government. The FAA wants to declare FPV (First Person View) flying by 
+		hobbists to be illegal for security reasons. Also the FAA would have unmanned systems
+		hobbists believe that the laws regulating unmanned systems is very black and white even
+		though there are lots of grey areas as to what is allowed. Due to not being a law 
+		making body themselves, FPV hardware is still legal in the United States but, as was
+		mentioned before, their opinions are held with high regard with legislative bodies and 
+		so FPV hardware being available my not last.
+		
+		Summary of Accessability and Availability
+			Unmanned systems are very accessable which is both a blessing and a curse. It makes
+			entering the hobby easy, however, it allows irresponsible persons into the hobby as
+			well which can bring harm to the reputation of unmanned systems.
+			
+			A team needs to take careful consideration as to where the system will be operating
+			during the design phase as laws and regulations from available modules to radio 
+			frequencies vary widely from country to country and the penalties for breaking these
+			laws can be very severe.
+			
+		The meeting next covered characteristics of unmanned systems with an emphasis on aerial
+		platforms due to extensive work with that type of system by the MUST president. First 
+		posible applications for the systems were examined including imaging, security, 
+		surveying, search and rescue and intelligence and reconnaissance. This is not an 
+		exhaustive list of applications as new ideas are being made every day. We are on the
+		brink of evolution for how we gather data.
+		
+		Next part of the characteristics discussed is the hardware that is common across the 
+		different types of unmanned systems. These common pieces of hardware include motors,
+		receivers, autopilot, speed controllers and power systems. 
+		
+		The motor will be run off of electricity or gas (engine) and they will vary by size and
+		power consumption and power output. Bigger motors do not always lead to better
+		performance and higher speeds and can actually be a detriment to the overall system. 
+		
+		The receiver operates by receiving signals from the transmitter and sending those
+		signals to different portions of the platform. It has to be bound to the transmitter
+		before it can be used. Also to note is that the receiver has to be properly mounted to
+		the platform for system operation. This step is critical for system operation and is
+		one of the most important steps in assembling the system. This is a case where the
+		manual for the device should be thoroughly read before attaching. The different
+		receivers will vary based on the number of channels that they can support and the mode
+		in which they communicate. For example some receivers support channel hopping which can
+		reduce latency issues between the transmitter and the receiver.
+		
+		The next piece of common hardware discussed was the autopilot. The autopilot works as 
+		the brain of the unmanned system as it is the central point of interface for the rest
+		of the hardware. The autopilot is also the piece of hardware that allows the unmanned
+		system to be autonomous. The autopilots available vary widely in the number of 
+		features available, the size of the autopilot and the power consumed by the autopilot.
+		The autopilot must be placed as close to the system's center of gravity as possible
+		so that it doesnt have to work as hard to stabilize. Also careful planning of should
+		be made for the number of features that the autopilot needs to provide against the 
+		power consumed by autopilots that provide those features.
+		
+		For systems with an electric motor an eletronic speed controller (ESC) will be needed.
+		This will convert the throttle signal from the transmitter to a three phase power for
+		the motor to ensure a steady power supply. The ESC's vary by input and output 
+		capabilities. These are not required nor needed on systems with a gas powered engine.
+		
+		The last piece of common hardware discussed was the power supply for the system. A
+		common type of battery for such systems are lithium polymer batteries. The power 
+		system can theoretically be gas but is often electric. The power system is one of the 
+		most important decisions when designing an unmanned systems because it is the 
+		determining factor for the other components of the system.
+		
+		Possible applications for unmanned systems was discussed again. Imaging is a huge
+		application for unmanned systems. Another application is security such as bomb
+		disposal so that a replaceable robot is put in harms way instead of a human. Land
+		surveying for construction companies is another possible application. The unmanned 
+		systems create 3D topography maps for the construction companies which allows better
+		site planning. Unmanned systems are also seeing use in search and rescue as land, air and
+		sea systems are currently being integrated to aid in the speed of the search for 
+		possible missing persons. Lastly unmanned systems are seeing use in the military. These
+		systems are much higher quality than civilian based ones.
+		
+		It should be remembered however that unmanned systems are a new and constantly 
+		evolving technology and new applications are being thought of daily. Keep in mind that
+		a key factor in the design of new applications is the system platform itself. An 
+		example of the new applications being thought of was to be shown in a video but the
+		video was removed by the user. The video would have shown an unmanned system being 
+		used to deliver a difibulator to persons in difficult to reach areas so that the 
+		difibulator can be used even before emergency personal can reach the person in need.
+		
+		Questions
+			Why do government models have the power to fly for hours? Are they just using things
+			that are not available for civilian use?
+				The response to this question was a theory that the government is using 
+				technology that is not available to civilians as parts might still be classified
+				or that they are using configurations that they are not posting.
+				
+		rcgroups.com is a good place for rc news
+	11/19/2014
+		Attendance: ~9 members
+		
+		This meeting dealt with the view of unmanned systems in popular culture. The meeting
+		started off by watching an episode of South Park which focused primarily on drones as
+		the show gives a good idea of some of the public's opinions on unmanned systems. The 
+		discussion after the episode started off with the view of drones as a tool for invasion
+		of privacy. We came to the conclusion that the drones themselves were not the problem 
+		but rather people who misuse them create problems. The episode also emphasized two 
+		polar extreme views on legality of drones. One was that all drones should be illegal 
+		where the other was being incapable of believing that the usage of drones would ever 
+		be abused. It was agreed by the members present that a middle ground should be reached
+		where it is understood that drones could be misused and invade the privacy of others,
+		however, they don't need to all be made illegal. One of the problems addressed is that 
+		a code of ethics for hobbist unmanned systems flyers is that the code of ethics is not
+		binding nor enforced and so it carrys no significant weight to keep a disreputable 
+		person from using drones to invade anothers privacy.
+		
+		One reason that the general public may react more to unmanned systems being used to 
+		invade their privacy as opposed to the online measures that the NSA has been using 
+		recently is that there is a visual aspect to the unmanned system. With the NSA it's 
+		more difficult to conceptualize the kind of information and data they collect and how
+		it could be used as opposed to a camera on a flying device hovering in a window. This 
+		leads to a larger backlash against drones should one be caught invading the privacy of
+		another person.
+		
+		Last item of the meeting was that the design contest for an icon for the Mizzou Unmanned
+		Systems Team ends on December first. Anyone still wanting to participate needs to turn 
+		in a design to Aaron before that time.
+	12/3/2014
+		Attendance: 8 members
+		
+		For this meeting Shakespeares was generous enough to donate pizza. The meeting started 
+		with a discussion on what the team could do to continue recieving pizza from shakespeares
+		and generally how to get sponsors for the team. One idea for something that could be done
+		for Shakespeares is to make a video advertisement for the company featuring drones with
+		the pizzas. Another possible interaction with Shakespeares is to use them to help fund
+		raise for the team. Shakespeares has a fundraising program where a group (such as MUST) 
+		hands out flyers for the fundraising event and when the flyers are shown to Shakespeares
+		a percentage of the profit gets sent to the group. This would not be a way to continue the
+		free pizza, however, the profit could be used to buy pizza for the team from a cheaper
+		pizza restaurant such as Italian Village. Another item mentioned in regards to sponsor 
+		relations was visibility of the team. The more events and competitions that we take part
+		in, the more often sponsorship logos would be able to be seen and therefore make it more
+		reasonable to sponsor the team. Also increasing public visibility could bring in new 
+		members to the team who are interested in unmanned systems.
+
+		Another idea for a partnership with Shakespeares was to create/design ground drones that
+		could deliver pizzas for the company. This idea brought up many questions of feasibility
+		such as what would stop a person from taking the pizza or tampering with the drone while
+		it is on its way to deliver a pizza. One idea was to make the drone heavy with a lock box 
+		so that it would be impractical to steal the pizza or drone but it was mentioned that this
+		could have adverse affects on the performance of the drone. Another problem mentioned was
+		the legality of where the drone could drive considering it's illegal for bicyclists to 
+		ride on the sidewalks. Those present at the meeting were unsure of how the ground drones 
+		would be considered legally.
+	1/20/2015
+		Attendance: Aaron, John, Brandon, Will
+		
+		The meeting started off with discussing how and when future meetings would transpire. It
+		was decided that meetings should be held from 4 to 6 PM on Wednesdays with the first 
+		meeting of the month be a general meeting and the rest be build meetings/meeting up for 
+		research. The build meetings would be more casual and be a time for people to work on
+		the entry for competitions as well as individual research work time. A space will be 
+		needed for the meetings and the current plan is to use C1212 in Lafferre until further
+		notice. It should be noted that the FLC meets in C1212 at 6 however this event is not often
+		populated and therefore any conflict should be easy to resolve. Also the tables will need
+		to be protected if work is being done and Aaron mentioned that someone has roll out pads 
+		that can be used. Work should be done however to find a dedicated workspace for the team
+		for the future. (Team has storage for projects through Orgsync). Due to the timing of the
+		meeting it was agreed that providing food should not be considered a necessity.
+		
+		It was suggested that a google doc should be created listing the contents of the drone
+		closet inventory.
+		
+		The next main item of the meeting was to develop general plans for the semester for the 
+		team. First we need to focus on getting more members to join the team. Aaron signed up
+		for a position at the student involvement fair on January 22nd in the Student Center but
+		as of the time of the meeting he has yet to hear back as to whether or not we have a spot.
+		Another way to spread the information of the team is to put up flyers like last semester
+		but add meeting time and place, mention that the team is involved in competitions and add
+		the logo. In addition it was discussed that the team could do demonstrations of UAV's on campus
+		Also discussed was methods of bringing new members up to speed with unmanned systems. Ideas
+		included sending them to the old meeting videos, holding a new member meeting if there are
+		lots of new members, having existing members mentor the new members and to add the new 
+		members to existing research and project groups. The next major issue with the plans for 
+		the semester was involvement in a competition. Currently the team is signed up for the SUAS
+		competition and has paid the fee for entry. The plane used last year by members of the team
+		is still available and can be made operational for the upcoming competition. Things that 
+		would need to be done are to put a gas motor on the plane to be used, develop a long range 
+		wireless network for the plane, tune up the plane and get the target recognition software
+		working. Another possible competition is the IARC (aerialroboticscompetition.org). Aaron
+		is going to look more into this competition and provide more information about it at a later
+		date. It was agreed that the team should only be involved in one competition this semester
+		due to the low number of members.
+		
+		Another item brought up at the meeting was the creation of a MUST website to use instead of
+		the facebook page. It would provide a more professional look and we could direct potential
+		sponsers or other important non-members to this site. The site wouldnt have the conectivity
+		that facebook has however and so maybe continue to use the facebook page for team 
+		communication. It was decided that a place holder website could be created until a member 
+		is found who would be interested in maintaining an official site.
+		
+		Lastly a donation form for a steel bridge team at Missouri SnT was shown as a good idea for
+		our team. The form would have different donation amounts and the benefits that those amounts
+		would provide. Also mentioned was the idea of a term length for the benefits. The two term
+		lengths suggested were a full year or 6 months so that as the team changes from semester to
+		semester they dont have to be held to sponsorships decided upon by the team of the previous
+		semester. Jacob Sweet was going to talk to the company that he interned with over break as
+		to potential donation amounts and what they might like for the amount to try to get a 
+		baseline that we could use to create a more formal form.
+		
+		To do by next meeting
+		- Find out from orgsync if we have a table at the Involvement Fair
+		- Edit the flyer
+		- look into possibilities for demonstrations on campus
+		- Jacob Sweet donation from Orschelin
+		- Donation Form
+		- Look into OpenCV for Python
+		- Ways to get new and active members
+		
+		
+		
+		
+		
+		
+		
+		
+	

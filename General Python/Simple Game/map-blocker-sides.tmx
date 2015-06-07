@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+  <image source="../../Tiles/tileset/grass-tiles-2-small.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="73" name="Triggers" tilewidth="32" tileheight="32">
+  <image source="../r1chardj0n3s-pygame-tutorial-d27e939a73bd/triggers.png" width="192" height="32"/>
+ </tileset>
+ <layer name="set" width="50" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2s0KgkAUhmEJ0kUgmEL0B62i3EYX0P3fVCM5MBwmmcHR8ynf4kXoj/MwJ1rkNsuyI0gnUej7ctPZ9HJ6mlrxWEwbT6WT7/mxXYRjbypMtakS8+0CHaVCD8dxMzV9RX+tnNcelGaMdXTlwlIIC2rSUQ5Y2sjP3ik7fBZ7jTmbOffwn0Na5NncTZ8Z5xzjsJY6wdloOOReX/tSfG/enqZyDO310K6Fzq+xVzGWZqIZp3LYXZOeJTps0hFqSf3bMtaB0lodS7W4Du1ZUji056CDDsTowIoOrOjAig6s6MCKDqzs/x/ac9Dxay17RQdWdGBFB1Z0YEUHVnRg1Tns/QlLrrvf6gtHQaBS
+  </data>
+ </layer>
+ <objectgroup name="triggers" width="50" height="50" visible="0">
+  <object name="tdlr" x="-45" y="2" width="1920" height="20">
+   <properties>
+    <property name="blockers" value="tdlr"/>
+   </properties>
+  </object>
+  <object x="2" y="-96" width="20" height="1920">
+   <properties>
+    <property name="blockers" value="tdlr"/>
+   </properties>
+  </object>
+  <object x="1577" y="-87" width="20" height="1920">
+   <properties>
+    <property name="blockers" value="tdlr"/>
+   </properties>
+  </object>
+  <object x="-118" y="1579" width="1920" height="20">
+   <properties>
+    <property name="blockers" value="tdlf"/>
+   </properties>
+  </object>
+  <object name="player" gid="73" x="159" y="130">
+   <properties>
+    <property name="player" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

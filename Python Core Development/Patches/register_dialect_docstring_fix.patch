@@ -1,0 +1,12 @@
+diff -r abe0c5a78d68 Modules/_csv.c
+--- a/Modules/_csv.c	Thu May 28 17:10:29 2015 -0400
++++ b/Modules/_csv.c	Thu May 28 16:52:12 2015 -0500
+@@ -1588,7 +1588,7 @@
+ 
+ PyDoc_STRVAR(csv_register_dialect_doc,
+ "Create a mapping from a string name to a dialect class.\n"
+-"    dialect = csv.register_dialect(name, dialect)");
++"    dialect = csv.register_dialect(name[, dialect], **fmtparams)");
+ 
+ PyDoc_STRVAR(csv_unregister_dialect_doc,
+ "Delete the name/dialect mapping associated with a string name.\n"
