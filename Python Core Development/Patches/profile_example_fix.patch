@@ -1,0 +1,12 @@
+diff -r db08f902bb3a Doc/library/profile.rst
+--- a/Doc/library/profile.rst	Thu Jun 04 14:34:43 2015 -0500
++++ b/Doc/library/profile.rst	Thu Jun 04 16:40:31 2015 -0500
+@@ -172,7 +172,7 @@
+ for only the class init methods (since they are spelled with ``__init__`` in
+ them).  As one final example, you could try::
+ 
+-   p.sort_stats('time', 'cum').print_stats(.5, 'init')
++   p.sort_stats('time', 'cumulative').print_stats(.5, 'init')
+ 
+ This line sorts statistics with a primary key of time, and a secondary key of
+ cumulative time, and then prints out some of the statistics. To be specific, the

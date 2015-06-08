@@ -1,0 +1,17 @@
+diff -r 748c55375225 Doc/library/csv.rst
+--- a/Doc/library/csv.rst	Fri May 29 09:06:24 2015 -0400
++++ b/Doc/library/csv.rst	Fri May 29 14:23:03 2015 -0500
+@@ -313,7 +313,12 @@
+ the :class:`Dialect` class as the dialect parameter.  In addition to, or instead
+ of, the *dialect* parameter, the programmer can also specify individual
+ formatting parameters, which have the same names as the attributes defined below
+-for the :class:`Dialect` class.
++for the :class:`Dialect` class. Note that the default values given
++for the attributes below are for the :class:`excel` dialect, not the :class:`Dialect`
++class itself, because :class:`excel` is the default dialect used by the :mod:`csv`
++module. When subclassing the :class:`Dialect` class, all of the following attributes
++should be specified by your subclass because :class:`Dialect` defaults them all to
++:const:`None`.
+ 
+ Dialects support the following attributes:
+ 

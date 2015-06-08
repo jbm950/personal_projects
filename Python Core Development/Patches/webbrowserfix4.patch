@@ -1,0 +1,124 @@
+diff -r 6fcb64097b1c Lib/webbrowser.py
+--- a/Lib/webbrowser.py	Mon Jun 01 12:15:47 2015 -0400
++++ b/Lib/webbrowser.py	Mon Jun 01 13:44:40 2015 -0500
+@@ -495,10 +495,33 @@
+ #
+ 
+ if sys.platform[:3] == "win":
++    # Access the windows registry to later determine
++    # what browsers are on the system.
++    import winreg
++    HKLM = winreg.HKEY_LOCAL_MACHINE
++    subkey = r'Software\Clients\StartMenuInternet'
++    read32 = winreg.KEY_READ | winreg.KEY_WOW64_32KEY
++    read64 = winreg.KEY_READ | winreg.KEY_WOW64_64KEY
++    key32 = winreg.OpenKey(HKLM, subkey, access=read32)
++    key64 = winreg.OpenKey(HKLM, subkey, access=read64)
++
++
+     class WindowsDefault(BaseBrowser):
++        # Windows Default opening arguments.
++
++        cmd = "start"
++        newwindow = ""
++        newtab = ""
++
+         def open(self, url, new=0, autoraise=True):
++			# Format the command for optional arguments and add the url.
++            if new == 1:
++            	self.cmd += " " + self.newwindow
++            elif new == 2:
++            	self.cmd += " " + self.newtab
++            self.cmd += " " + url
+             try:
+-                os.startfile(url)
++            	subprocess.call(self.cmd, shell=True)
+             except OSError:
+                 # [Error 22] No application is associated with the specified
+                 # file for this operation: '<URL>'
+@@ -506,19 +529,77 @@
+             else:
+                 return True
+ 
++
++    # Windows Sub-Classes for commonly used browsers.
++
++    class InternetExplorer(WindowsDefault):
++        """Launcher class for Internet Explorer browser"""
++
++        cmd = "start iexplore.exe"
++        newwindow = ""
++        newtab = ""
++
++
++    class WinChrome(WindowsDefault):
++        """Launcher class for windows specific Google Chrome browser"""
++
++        cmd = "start chrome.exe"
++        newwindow = "-new-window"
++        newtab = "-new-tab"
++
++
++    class WinFireFox(WindowsDefault):
++        """Launcher class for windows specific Firefox browser"""
++
++        cmd = "start firefox.exe"
++        newwindow = "-new-window"
++        newtab = "-new-tab"
++
++
++    class WinOpera(WindowsDefault):
++        """Launcher class for windows specific Opera browser"""
++
++        cmd = "start opera"
++        newwindow = ""
++        newtab = ""
++
++
++    class WinSeaMonkey(WindowsDefault):
++        """Launcher class for windows specific SeaMonkey browser"""
++
++        cmd = "start seamonkey"
++        newwinow = ""
++        newtab = ""
++
++
+     _tryorder = []
+     _browsers = {}
+ 
+-    # First try to use the default Windows browser
++    # First try to use the default Windows browser.
+     register("windows-default", WindowsDefault)
+ 
+-    # Detect some common Windows browsers, fallback to IE
+-    iexplore = os.path.join(os.environ.get("PROGRAMFILES", "C:\\Program Files"),
+-                            "Internet Explorer\\IEXPLORE.EXE")
+-    for browser in ("firefox", "firebird", "seamonkey", "mozilla",
+-                    "netscape", "opera", iexplore):
+-        if shutil.which(browser):
+-            register(browser, None, BackgroundBrowser(browser))
++    # Detect some common Windows browsers.
++    # Check if there are any different browsers in the
++    # 32 bit location instead of the 64 bit location.
++    browsers = set([winreg.EnumKey(key32,i) for i
++                    in range(winreg.QueryInfoKey(key32)[0])])
++    browsers = browsers|set([winreg.EnumKey(key64,i) for i
++                             in range(winreg.QueryInfoKey(key64)[0])])
++
++    for browser in browsers:
++        browser = browser.lower()
++        if "iexplore" in browser:
++            register("iexplore",None,InternetExplorer("iexplore"))
++        elif "chrome" in browser:
++            register("chrome",None,WinChrome("chrome"))
++        elif "firefox" in browser:
++            register("firefox",None,WinFireFox("firefox"))
++        elif "opera" in browser:
++            register("opera",None,WinOpera("opera"))
++        elif "seamonkey" in browser:
++            register("seamonkey",None,WinSeaMonkey("seamonkey"))
++        else:
++            register(browser, None, WindowsDefault(browser))
+ 
+ #
+ # Platform support for MacOS
