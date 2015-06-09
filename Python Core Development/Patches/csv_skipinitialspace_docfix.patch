@@ -1,0 +1,37 @@
+diff -r 748c55375225 Doc/library/csv.rst
+--- a/Doc/library/csv.rst	Fri May 29 09:06:24 2015 -0400
++++ b/Doc/library/csv.rst	Fri May 29 15:27:55 2015 -0500
+@@ -370,7 +370,7 @@
+ 
+ .. attribute:: Dialect.skipinitialspace
+ 
+-   When :const:`True`, whitespace immediately following the *delimiter* is ignored.
++   When :const:`True`, spaces immediately following the *delimiter* are ignored.
+    The default is :const:`False`.
+ 
+ 
+diff -r 748c55375225 Modules/_csv.c
+--- a/Modules/_csv.c	Fri May 29 09:06:24 2015 -0400
++++ b/Modules/_csv.c	Fri May 29 15:27:55 2015 -0500
+@@ -636,7 +636,7 @@
+             self->state = ESCAPED_CHAR;
+         }
+         else if (c == ' ' && dialect->skipinitialspace)
+-            /* ignore space at start of field */
++            /* ignore spaces at start of field */
+             ;
+         else if (c == dialect->delimiter) {
+             /* save empty field */
+@@ -1526,9 +1526,9 @@
+ "        quoting character.  It defaults to '\"'.\n"
+ "    * delimiter - specifies a one-character string to use as the \n"
+ "        field separator.  It defaults to ','.\n"
+-"    * skipinitialspace - specifies how to interpret whitespace which\n"
+-"        immediately follows a delimiter.  It defaults to False, which\n"
+-"        means that whitespace immediately following a delimiter is part\n"
++"    * skipinitialspace - specifies how to interpret spaces which\n"
++"        immediately follow a delimiter.  It defaults to False, which\n"
++"        means that spaces immediately following a delimiter are part\n"
+ "        of the following field.\n"
+ "    * lineterminator -  specifies the character sequence which should \n"
+ "        terminate rows.\n"
