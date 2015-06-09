@@ -11,7 +11,8 @@
 #!/usr/bin/env python
 
 import pygame,sys,random,csv
-import pygametools as pt
+import pygame_toolbox.graphics as ptg
+import pygame_toolbox.tilegame_tools as pttt
 
 class army(object):
     def __init__(self,monster_list):
@@ -41,7 +42,7 @@ class monster(object):
 
         # Take the raw data and set the monsters attributes
         self.name = self.rawdata[0]
-        self.tile = pt.Tile(self.rawdata[1],(150,150))
+        self.tile = pttt.Tile(self.rawdata[1],(150,150))
         self.tile.initialize_shade('black',(0,0,0),235)
         self.hp = int(self.rawdata[2])
         self.damage = int(self.rawdata[3])
@@ -55,11 +56,11 @@ def close():
     pygame.quit()
     sys.exit()
 
-class Titlescreen(pt.Menu):
+class Titlescreen(ptg.Menu):
     def __init__(self):
         header = ['Welcome to Fight Factory 2']
         buttons = [['Play',lambda:2],['Quit',close]]
-        pt.Menu.__init__(self,(1000,800),(0,200,200),header,buttons)
+        ptg.Menu.__init__(self,(1000,800),(0,200,200),header,buttons)
 
 class Combatscreens:
     def __init__(self):
@@ -74,6 +75,8 @@ class Combatscreens:
         self.actionlist = []
         self.mon_choosing = 0
         self.pos = (0,0)
+        self.music = None
+        self.widgetlist = None
         print()
 
     def combat(self):
@@ -112,7 +115,7 @@ class Combatscreens:
                 hpbar = pygame.Rect((x[0],y2),(int(150 * i.hp/i.hpmax),20))
                 pygame.draw.rect(self.image,(255,0,0),hpbar)
 
-                hptext = pt.Linesoftext(['Hp                                 %d/%d' % (i.hp,i.hpmax)],
+                ptg.Linesoftext(['Hp                                 %d/%d' % (i.hp,i.hpmax)],
                                         (x[1],y2),surface = self.image,fontsize = 28)
 
         drawside(self,self.playerarmy,1)
@@ -123,10 +126,10 @@ class Combatscreens:
 
         self.draw_main()
 
-        self.buttonlist = [pt.Button(0,'Fight',(350,700),True,self.image,func = lambda:1,sound = 'button_click.wav')]
-        self.buttonlist += [pt.Button(0,'Pass',(550,700),True,self.image,func = lambda:2,sound = 'button_click.wav')]
+        self.buttonlist = [ptg.Button(0,'Fight',(350,700),True,self.image,func = lambda:1,sound = 'button_click.wav')]
+        self.buttonlist += [ptg.Button(0,'Pass',(550,700),True,self.image,func = lambda:2,sound = 'button_click.wav')]
 
-        return pt.Menu.update(self,screen,clock)
+        return ptg.Menu.update(self,screen,clock)
 
     def choose_target(self,screen,clock):
         self.buttonlist = []
@@ -137,7 +140,7 @@ class Combatscreens:
 
         self.draw_main()
 
-        pt.Linesoftext(['Choose your target!'],(500,700),True,self.image)
+        ptg.Linesoftext(['Choose your target!'],(500,700),True,self.image)
 
         def ct_update(self,screen,clock):
             # handle the events of the title screen
@@ -162,20 +165,20 @@ class Combatscreens:
 
     def display_results(self,screen,clock):
         self.draw_main()
-        self.buttonlist = [pt.Button(0,'Continue',(500,700),True,self.image,func = lambda:1,sound = 'button_click.wav')]
+        self.buttonlist = [ptg.Button(0,'Continue',(500,700),True,self.image,func = lambda:1,sound = 'button_click.wav')]
 
-        return pt.Menu.update(self,screen,clock)
+        return ptg.Menu.update(self,screen,clock)
 
     def final_page(self,screen,clock,result):
         self.draw_main()
-        self.buttonlist = [pt.Button(0,'End',(550,750),True,self.image,func = close,sound = 'button_click.wav')]
-        self.buttonlist += [pt.Button(0,'Play again?',(420,750),True,self.image,func = lambda:5,sound = 'button_click.wav')]
+        self.buttonlist = [ptg.Button(0,'End',(550,750),True,self.image,func = close,sound = 'button_click.wav')]
+        self.buttonlist += [ptg.Button(0,'Play again?',(420,750),True,self.image,func = lambda:5,sound = 'button_click.wav')]
         if result == 0:
-            pt.Linesoftext(['You lost!'],(500,700),True,self.image)
+            ptg.Linesoftext(['You lost!'],(500,700),True,self.image)
         elif result == 1:
-            pt.Linesoftext(['You won!'],(500,700),True,self.image)
+            ptg.Linesoftext(['You won!'],(500,700),True,self.image)
 
-        return pt.Menu.update(self,screen,clock)
+        return ptg.Menu.update(self,screen,clock)
 
     def update(self,screen,clock):
         while True:
@@ -259,6 +262,5 @@ class Main(object):
 if __name__ == '__main__':
     pygame.mixer.pre_init(44100, -16, 2, 2048)
     pygame.init()
-    screen = pygame.display.set_mode((1000,800))
+    screen = pygame.display.set_mode((1000 ,800))
     Main().update(screen)
-

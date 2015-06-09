@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Name:        module1
 # Purpose:
 #
@@ -7,11 +7,12 @@
 # Created:     26/01/2015
 # Copyright:   (c) James 2015
 # Licence:     <your licence>
-#-------------------------------------------------------------------------------
-#!/usr/bin/env python
+# ------------------------------------------------------------------------------
+# !/usr/bin/env python
 
-import pygame,sys
+import pygame
 import pygame_toolbox.graphics as ptg
+import pygame_toolbox.graphics.widgets as ptgw
 import pygame_toolbox.tilegame_tools as pttt
 
 pygame.init()
@@ -26,7 +27,7 @@ class monster(object):
 
         # Take the raw data and set the monsters attributes
         self.name = self.rawdata[0]
-        self.tile = pttt.Tile(self.rawdata[1],(150,150))
+        self.tile = ptgw.Tile(self.name, self.rawdata[1],(150,150))
         self.tile.initialize_shade('black',(0,0,0),235)
         self.hp = int(self.rawdata[2])
         self.damage = int(self.rawdata[3])
@@ -44,7 +45,7 @@ class army(list):
 
 class Tile(pttt.Tile):
     def __init__(self):
-        pttt.Tile.__init__(self,"forrest.png",(200,150))
+        pttt.Tile.__init__(self,"Forrest.png",(200,150))
         self.army = None
         self.armyflag = ptg.Button(1,'flag.png',(0,0),resize = (200,150))
         self.armyflag.image.set_colorkey((255,255,255))
@@ -139,9 +140,16 @@ class Splitarmymenu(ptg.Menu):
         self.buttonlist += [ptg.Button(0,'Split',(250,300),True,self.image,func = lambda:1)]
 
         for i in army:
-            self.image.blit(i.tile.image,((army.index(i)+1)*12+army.index(i)*150,100))
+            i.tile.set_position(((army.index(i)+1)*12+army.index(i)*150, 100),
+                                surface=self.image)
+            self.widgetlist.append(i.tile)
 
         ptg.Menu.set_offset(self,(400,300),mid = 'c')
+
+
+def toggle_unit(unit):
+    pass
+
 
 class Main(object):
     def __init__(self):
@@ -177,12 +185,3 @@ if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((800,600))
     Main().update(screen)
-
-
-
-
-
-
-
-
-
