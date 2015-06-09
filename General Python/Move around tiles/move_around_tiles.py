@@ -27,7 +27,7 @@ class monster(object):
 
         # Take the raw data and set the monsters attributes
         self.name = self.rawdata[0]
-        self.tile = ptgw.Tile(self.name, self.rawdata[1],(150,150))
+        self.tile = ptgw.wTile(self.name, self.rawdata[1],(150,150))
         self.tile.initialize_shade('black',(0,0,0),235)
         self.hp = int(self.rawdata[2])
         self.damage = int(self.rawdata[3])
@@ -131,25 +131,51 @@ class Combinearmymenu(ptg.Menu):
         ptg.Menu.__init__(self,(500,400),(255,69,0),header,buttons)
         ptg.Menu.set_offset(self,(400,300),mid = 'c')
 
+
 class Splitarmymenu(ptg.Menu):
-    def __init__(self,army):
+    def __init__(self, army):
         header = ['Choose the units for the new army']
         buttons = []
-        ptg.Menu.__init__(self,(500,400),(255,69,0),header,buttons)
-        self.buttonlist += [ptg.Button(0,'Return',(250,350),True,self.image,func = lambda:4)]
-        self.buttonlist += [ptg.Button(0,'Split',(250,300),True,self.image,func = lambda:1)]
+        ptg.Menu.__init__(self, (500, 400), (255, 69, 0), header, buttons)
+        self.buttonlist += [ptg.Button(0, 'Return', (250, 350), True,
+                                       self.image, func=lambda:4)]
+        self.buttonlist += [ptg.Button(0, 'Split', (250, 300), True,
+                                       self.image, func=lambda:7)]
+
+        self.army = army
 
         for i in army:
             i.tile.set_position(((army.index(i)+1)*12+army.index(i)*150, 100),
                                 surface=self.image)
+            i.tile.func = toggle_unit
             self.widgetlist.append(i.tile)
 
-        ptg.Menu.set_offset(self,(400,300),mid = 'c')
+        ptg.Menu.set_offset(self, (400, 300), mid='c')
 
 
-def toggle_unit(unit):
-    pass
+def toggle_unit(unit, menu):
+    unit.toggle_shade('blue')
+    if unit.status:
+        unit.status = 0
+    else:
+        unit.status = 1
+    menu.__init__(menu.army)
 
+
+class Splitarmyerror(ptg.Menu):
+    def __init__(self, error_flag):
+        """error_flag = 1 - too few units to split
+        error_flag = 2 - can't split all units
+        """
+        if error_flag == 1:
+            header = ["Can't split an army of one"]
+            buttons = [['Return', lambda: 4]]
+        elif error_flag == 2:
+            header = ["Need at least one unit to remain"]
+            buttons = [['Return', lambda: 6]]
+
+        ptg.Menu.__init__(self, (400, 300), (60, 69, 255), header, buttons)
+        ptg.Menu.set_offset(self, (400, 300), mid='c')
 
 class Main(object):
     def __init__(self):
@@ -174,14 +200,40 @@ class Main(object):
                 self.progress = Tilemenu(tileclicked).update(screen,self.clock)
             elif self.progress == 4:
                 self.progress = Armyview(tileclicked.army).update(screen,self.clock)
+                if self.progress == 6:
+                    if len(tileclicked.army) == 1:
+                        self.progress = Splitarmyerror(1).update(screen,
+                                                                 self.clock)
             elif self.progress == 5:
                 Tilemap(self.tilelist).move_update(tileclicked,screen,self.clock)
                 self.progress = 1
             elif self.progress == 6:
-                self.progress = Splitarmymenu(tileclicked.army).update(screen,self.clock)
+                [self.progress, self.split_status] = Splitarmymenu(tileclicked.army).update(screen,self.clock)
+                if self.progress == 4:
+                    for i in tileclicked.army:
+                        if i.tile.shades['blue'][0]:
+                            i.tile(Splitarmymenu(tileclicked.army))
+            elif self.progress == 7:
+                temp_army = army([])
+                for i in self.split_status:
+                    if i[1] == 0:
+                        current_index = self.split_status.index(i)
+                        temp_army.append(tileclicked.army[current_index])
+                if len(temp_army) == 0:
+                    self.progress = Splitarmyerror(2).update(screen, self.clock)
+                else:
+                    for i in temp_army:
+                        tileclicked.army.remove(i)
+                    for i in tileclicked.army:
+                        i.tile(Splitarmymenu(tileclicked.army))
+                    Tilemap(self.tilelist).move_update(tileclicked, screen,
+                                                    self.clock)
+                    tileclicked.initialize_army(temp_army)
+                    self.progress = 1
+
 
 if __name__ == '__main__':
     pygame.mixer.pre_init(44100, -16, 2, 2048)
     pygame.init()
-    screen = pygame.display.set_mode((800,600))
+    screen = pygame.display.set_mode((800, 600))
     Main().update(screen)
