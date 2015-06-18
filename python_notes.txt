@@ -1,6 +1,6 @@
 Python Core Bug Tracker Issues
-    Patches Accepted: 2
-    7/19/2014 webbrowser module debug (8232) (status: patch submitted after reviewed)
+    Patches Accepted: 3
+    7/19/2014 webbrowser module debug (8232) (status: patch accepted)
         Overview
             Issue was reported that on windows systems the specification to open a 
             new window or open a new tab with the open functions was being ignored. The 
@@ -372,14 +372,15 @@ Python Core Bug Tracker Issues
             .    dialect and not the parent Dialect class
             - Also mentioned that the attributes need to be specified when sub-classing
             .    because the parent Dialect class defaults all the parameters to None.
-    5/29/2015 csv skipinitialspace documentation fix (21297) (status: patch reviewed)
+    5/29/2015 csv skipinitialspace documentation fix (21297) (status: patch submitted after review)
         Overview
-            The documentation for skipinitialspace in the csv module has vague wording. It says
-            that, when True, leading whitespace in the values will be ignored. Upon inspection,
-            however, it ignores spaces but not other whitespace characters such as tab (/t).
-            Also theres a location describing how it works by saying that it "ignore[s] space
-            at start of field" and so this could cause confusion as to whether or not it ignores
-            multiple spaces or just a single space.
+            The documentation for skipinitialspace in the csv module has vague
+            wording. It says that, when True, leading whitespace in the values
+            will be ignored. Upon inspection, however, it ignores spaces but
+            not other whitespace characters such as tab (/t).  Also theres a
+            location describing how it works by saying that it "ignore[s] space
+            at start of field" and so this could cause confusion as to whether
+            or not it ignores multiple spaces or just a single space.
         Patch submission - 5/29/2015
             I changed the locations in the csv.rst file that mention white space to say just space,
             with necessary grammer changes as well.
@@ -403,6 +404,17 @@ Python Core Bug Tracker Issues
         Patch reviewed - 6/5/2015
             The reviewer liked the documentation fix and requested that I convert my test script to 
             a test case and add it in Lib/test/test_csv.py.
+        Patch submission - 6/18/2015
+            I added a form of my test code to the unit test module, test_csv. 
+            This tests taking singluar and multiple spaces off the front of the
+            item and that the csv module does not remove other whitespace items
+            like tabs.
+
+                def test_read_skipinitialspace(self):
+                    self._read_test(['no space, space,  spaces,\ttab'],
+                                    [['no space', 'space', 'spaces', '\ttab']],
+                                    skipinitialspace=True)
+            This patch was submitted as a separate patch than the doc fix.
         Summary:
             - References to whitespace in the csv module documentation for skipinitialspace were
             .    misleading because it would only skip spaces not general whitespace like tabs (\t)
@@ -417,6 +429,12 @@ Python Core Bug Tracker Issues
             Patch review - 6/5/2015
             - The patch was liked and it was requested that I convert my test script to a test in
             .    the test_csv.py file.
+        
+            Patch submission - 6/18/2015
+            - Added a test case to test_csv for skipinitialspace. This tests
+            .    one space, two spaces and a tab to ensure that only spaces are
+            .    skipped and that multiple spaces will be skipped.
+            - Submitted as a separate patch
     6/1/2015 custom stdout object needing a flush method (12020) (status: clarification requested)
         Overview
             The problem is that, upon exit of the script, whatever is designated the sys.stdout will

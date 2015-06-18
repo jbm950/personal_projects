@@ -15,9 +15,6 @@ import pygame_toolbox.graphics as ptg
 import pygame_toolbox.graphics.widgets as ptgw
 import pygame_toolbox.tilegame_tools as pttt
 
-pygame.init()
-screen = pygame.display.set_mode((800, 600))
-
 
 class monster(object):
     def __init__(self, monsternum):
@@ -59,6 +56,9 @@ class Tile(pttt.Tile):
         self.image.blit(*self.armyflag.blitinfo)
 
     def remove_army(self):
+        """This method will clear the army attribute and take the flag off of
+        the image
+        """
         self.army = None
         self.image.blit(self.pic, (0, 0))
 

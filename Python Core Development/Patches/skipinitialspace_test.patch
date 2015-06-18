@@ -1,0 +1,15 @@
+diff -r af793c7580f1 Lib/test/test_csv.py
+--- a/Lib/test/test_csv.py	Wed Jun 17 10:09:24 2015 -0500
++++ b/Lib/test/test_csv.py	Thu Jun 18 17:16:37 2015 -0500
+@@ -278,6 +278,11 @@
+                           ['abc,3'], [[]],
+                           quoting=csv.QUOTE_NONNUMERIC)
+ 
++    def test_read_skipinitialspace(self):
++        self._read_test(['no space, space,  spaces,\ttab'],
++                        [['no space', 'space', 'spaces', '\ttab']],
++                        skipinitialspace=True)
++
+     def test_read_bigfield(self):
+         # This exercises the buffer realloc functionality and field size
+         # limits.
