@@ -1,0 +1,7 @@
+- [ ] Update both README.md and README.rst
+- [ ] Check version number on README's and setup.py
+- [ ] Do a practice install of both sdist and bdist_wheel
+- [ ] Put on testpypi
+- [ ] Check appearance of readme on testpypi
+- [ ] Double check both readmes again
+- [ ] Publish to pypi
