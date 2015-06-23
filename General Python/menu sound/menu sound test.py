@@ -41,21 +41,28 @@ class Screen_two(ptg.Menu):
                                        sound='button_click.wav')]
 
 
-class Main(object):
-    def __init__(self):
+class Eventhandler:
+    def __init__(self, events):
+        self.events = events
         self.progress = 1
         self.clock = pygame.time.Clock()
 
-    def update(self, screen):
+    def update(self):
         while True:
-            if self.progress == 1:
-                self.progress = Titlescreen().update(screen, self.clock)
-            elif self.progress == 2:
-                self.progress = Screen_two().update(screen, self.clock)
+            for i in self.events:
+                if i[0] == self.progress:
+                    self.progress = i[1].update(self.screen, self.clock)
+
+
+class Main(Eventhandler):
+    def __init__(self, screen):
+        self.screen = screen
+        events = [[1, Titlescreen()], [2, Screen_two()]]
+        Eventhandler.__init__(self, events)
 
 
 if __name__ == '__main__':
     pygame.mixer.pre_init(44100, -16, 2, 2048)
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
-    Main().update(screen)
+    Main(screen).update()
