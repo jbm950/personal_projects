@@ -57,7 +57,7 @@ class Eventhandler:
 class Main(Eventhandler):
     def __init__(self, screen):
         self.screen = screen
-        events = [[1, Titlescreen()], [2, Screen_two()]]
+        events = [[1, Titlescreen().update], [2, Screen_two().update]]
         Eventhandler.__init__(self, events)
 
 
