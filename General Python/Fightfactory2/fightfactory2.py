@@ -246,6 +246,7 @@ class Combatscreens:
             elif self.page == 5:
                 self.__init__()
 
+
 class Main(object):
     def __init__(self):
         self.progress = 1
