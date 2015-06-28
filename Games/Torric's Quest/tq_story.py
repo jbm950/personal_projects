@@ -28,7 +28,21 @@ def get_text(text_num):
                     " many survived as far as we can tell and those that did aren't in good shape.",
                     " You look like the most whole person I've" ' seen this morning", he stammered.',
                     '"Come ' "I'll show you to the others. We've set up a medical area on the lawn",
-                    ' out front"'],['Meet goblin guarding bridge']]
+                    ' out front"', "        Arriving at the medical area you see many decorn in bad"
+                   " condition.", "There are some tending to the wounded but the vast majority are "
+                   "the ones","being tended to, many looking like this might be their last day.",
+                   '        "Torric!" you hear from one of the tents. Looking over you see Segal,',
+                   " the second in charge at the monastary, though given the recent events it's",
+                   "likely that his status has changed."],['        "Torric we need your help. The sacred sigil'
+                    ' was taken in the raid last', 'night. With it the goblins and orcs could create '
+                    "unprecedented chaos.", "As you can see you're the only one fit here to go retrieve it."
+                    ' Torric,', 'the stability of the region is now in your hands you must head out at','once.'
+                    ' The goblins have taken to the old trail heading along the edge of','the mountains."',
+                    "        The news hits hard. The anchient sigil?! It's known to","contain powerful magic"
+                    " but nothing has known how to use such magic", "in centuries. You quickly grab the nearest"
+                    " armor and sword from among", "the fallen and head towards the old trail. At least your "
+                    "headache has", "subsided"],
+                ['Meet goblin guarding bridge']]
     elif text_num == 2:
         return [['Find a skeleton in a cave']]
     elif text_num == 3:
