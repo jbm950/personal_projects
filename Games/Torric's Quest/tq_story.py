@@ -42,7 +42,16 @@ def get_text(text_num):
                     " but nothing has known how to use such magic", "in centuries. You quickly grab the nearest"
                     " armor and sword from among", "the fallen and head towards the old trail. At least your "
                     "headache has", "subsided"],
-                ['Meet goblin guarding bridge']]
+                   ["        You've just started down the old trail, pine trees your only current",
+                    "company. Despite being an nice day in early spring the forest remains",
+                    "quiet as if in reverence to those who fell during the night. You can hear",
+                    "Low River in the distance and can already picture the old bridge that",
+                    "you've crossed so many times over the years.",
+                    "        As you approach the bridge you see an unwelcome visitor blocking",
+                    "your path. One of the goblins from the raid remains standing directly in",
+                    'the middle of your path. "They says one of yous might be comin after us.',
+                    'I\'m here to ensure your road ends at this nasty place" it yells at you.',
+                    'With that it lunges foward sword drawn']]
     elif text_num == 2:
         return [['Find a skeleton in a cave']]
     elif text_num == 3:
