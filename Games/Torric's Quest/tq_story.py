@@ -51,9 +51,30 @@ def get_text(text_num):
                     "your path. One of the goblins from the raid remains standing directly in",
                     'the middle of your path. "They says one of yous might be comin after us.',
                     'I\'m here to ensure your road ends at this nasty place" it yells at you.',
-                    'With that it lunges foward sword drawn']]
+                    'With that the goblin lunges foward sword drawn']]
     elif text_num == 2:
-        return [['Find a skeleton in a cave']]
+        return [['        With the goblin slain your journey continues. You keep following the',
+                 'trail though the goblins still have quite a lead on you. The time and effort',
+                 'to kill the goblin on the bridge set you back even more. With the sun',
+                 'setting and still being a bit sore from the previous night you seek shelter.',
+                 'By this time you\'ve left Low River far behind you and you begin to near',
+                 'the mountains. As such you notice a cave not far off of the trail that would',
+                 'make decent shelter for the fast approaching night. After making a mental',
+                 'note of where to pick up the goblins trail in the morning you head off to',
+                 'the cave to sleep.',
+                 '        You wake up in the middle of the night, not really sure how many hours',
+                 'have past. It\'s raining outside now and there\'s the occasional flash of',
+                 'lightning. Perhaps that is what woke you up from your slumber.'],
+                ['        As your head starts to clear from sleepy foggyness you notice another',
+                 'noise in addition to the rain and lightning. Its a sort of rattling sound coming',
+                 'from one of the side holes in the cave. While trying to make sense of the new',
+                 'noise a figure stumbles out of the hole.',
+                 '        It\'s a skeleton! But what unholyness could reanimate such a corpse?',
+                 'Like the sigil\'s magic such a thing had been unheard of for centuries. Many',
+                 'had even believed such stories to simply be fanciful tales rather than',
+                 'historical fact. Such musings were irrelevant in the moment, however, as',
+                 'the skeleton seems to have noticed your presence and with a seeming',
+                 'hatred starts towards you. That\'s when you notice its axe.']]
     elif text_num == 3:
         return [['First goblin camp']]
     elif text_num == 4:
