@@ -76,7 +76,11 @@ def get_text(text_num):
                  'the skeleton seems to have noticed your presence and with a seeming',
                  'hatred starts towards you. That\'s when you notice its axe.']]
     elif text_num == 3:
-        return [['First goblin camp']]
+        return [['        The skeleton fall\'s to pieces in front of you and with it your chance',
+                 'at a decent night\'s sleep. The rain is still coming down hard outside of',
+                 'the cave and there\'s still a few hours of the night left. With the chase for',
+                 'the goblins in the morning you\'re going to need some rest, so you curl',
+                 'up against one of the wall and try to make due till dawn.']]
     elif text_num == 4:
         return [['Second cave']]
     elif text_num == 5:
