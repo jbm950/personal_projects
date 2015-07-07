@@ -190,6 +190,74 @@ class Splitarmyerror(ptg.Menu):
         ptg.Menu.set_offset(self, (400, 300), mid='c')
 
 
+class Mainhandle(ptg.Eventhandler):
+    def __init__(self, screen):
+        self.tilelist = pttt.Tilelist([[Tile() for i in range(0, 4)],
+                                       [Tile() for i in range(0, 4)],
+                                       [Tile() for i in range(0, 4)],
+                                       [Tile() for i in range(0, 4)]])
+        events = [[1, self.Tilemaphandle],
+                  [2, self.Tilemenuhandle],
+                  [4, self.Armyviewhandle],
+                  [5, self.Movehandle],
+                  [6, self.Splitarmymenuhandle],
+                  [7, self.Armyprocess]]
+        ptg.Eventhandler.__init__(self, events, screen)
+        self.tilelist[0][1].initialize_army(army([monster(0), monster(1)]))
+        self.tilelist[2][2].initialize_army(army([monster(3), monster(4),
+                                                  monster(5)]))
+        self.tilelist[0][2].initialize_army(army([monster(2)]))
+
+    def Tilemaphandle(self, screen, clock):
+        self.tileclicked = Tilemap(self.tilelist).update(screen, self.clock)
+        return 2
+
+    def Tilemenuhandle(self, screen, clock):
+        return Tilemenu(self.tileclicked).update(screen, clock)
+
+    def Armyviewhandle(self, screen, clock):
+        temp = Armyview(self.tileclicked.army).update(screen, clock)
+
+        if temp == 6:
+            if len(self.tileclicked.army) == 1:
+                return Splitarmyerror(1).update(screen, clock)
+            else:
+                return temp
+
+    def Movehandle(self, screen, clock):
+        Tilemap(self.tilelist).move_update(self.tileclicked, screen, self.clock)
+        return 1
+
+    def Splitarmymenuhandle(self, screen, clock):
+        tempmenu = Splitarmymenu(self.tileclicked.army)
+        [progress, self.split_status] = tempmenu.update(screen, self.clock)
+
+        if progress == 4:
+            for i in self.tileclicked.army:
+                if i.tile.shades['blue'][0]:
+                    i.tile(Splitarmymenu(self.tileclicked.army))
+
+        return progress
+
+    def Armyprocess(self, screen, clock):
+        temp_army = army([])
+        for i in self.split_status:
+            if i[1] == 0:
+                current_index = self.split_status.index(i)
+                temp_army.append(self.tileclicked.army[current_index])
+        if len(temp_army) == 0:
+            return Splitarmyerror(2).update(screen, self.clock)
+        else:
+            for i in temp_army:
+                self.tileclicked.army.remove(i)
+            for i in self.tileclicked.army:
+                i.tile(Splitarmymenu(self.tileclicked.army))
+            Tilemap(self.tilelist).move_update(self.tileclicked, screen,
+                                               self.clock)
+            self.tileclicked.initialize_army(temp_army)
+            return 1
+
+
 class Main(object):
     def __init__(self):
         self.progress = 1
@@ -253,4 +321,4 @@ if __name__ == '__main__':
     pygame.mixer.pre_init(44100, -16, 2, 2048)
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
-    Main().update(screen)
+    Mainhandle(screen).update()
