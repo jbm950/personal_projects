@@ -4,4 +4,6 @@
 - Software to help me track better my finances?
 - Unmanned systems software?
 - Green energy software?
-- App to trach rule of 5 daily
+- App to track rule of 5 daily
+    - Graph Results
+    - Update on given time period
