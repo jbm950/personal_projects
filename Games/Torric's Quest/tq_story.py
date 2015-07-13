@@ -80,9 +80,29 @@ def get_text(text_num):
                  'at a decent night\'s sleep. The rain is still coming down hard outside of',
                  'the cave and there\'s still a few hours of the night left. With the chase for',
                  'the goblins in the morning you\'re going to need some rest, so you curl',
-                 'up against one of the wall and try to make due till dawn.']]
+                 'up against one of the wall and try to make due till dawn.',
+                 '',
+                 "        The light starts to peek into the cave, morning has come. You blink",
+                 "away the remaining weariness in your eyes. Though not much you do feel",
+                 "a bit rested. After a quick bite to eat from your pack you're back out",
+                 "picking back up the goblin's trail. The heavy rain over night has washed",
+                 "away some of the signs, but goblins are not very dexterous creatures and",
+                 "the trail is not hard to find."],
+                ['        After following the trail a ways you start to come upon a camp.',
+                 'This must be where the goblins weathered out the storm from last',
+                 'night. You\'re making sure to keep your distance from the camp until',
+                 'you can be sure the camp is empty and it\'s safe to approach. Even',
+                 'at this distance though, the sheer size of the camp is impressive. It',
+                 'doesn\'t seem that the camp is still inhabited. The goblins and orcs',
+                 'must have left in a hurry for there are still tents and other equipment',
+                 'lying around and some of the campfires are still lit.',
+                 '        Having determined the camp must be empty you approach for',
+                 'a better look. As you enter the camp you hear some rustling in one of',
+                 'the tents followed by a stream of curses. Out pops a goblin who seems',
+                 'to be surprised to see you rather than the rest of the raiding group.']]
     elif text_num == 4:
-        return [['Second cave']]
+        return [['        "He must have overslept" you say to yourself as you look at the',
+                 'corpse in front of you.']]
     elif text_num == 5:
         return [['Open clearing']]
     elif text_num == 6:
