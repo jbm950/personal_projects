@@ -223,6 +223,7 @@ class Mainhandle(ptg.Eventhandler):
                 return Splitarmyerror(1).update(screen, clock)
             else:
                 return temp
+        return temp
 
     def Movehandle(self, screen, clock):
         Tilemap(self.tilelist).move_update(self.tileclicked, screen, self.clock)
