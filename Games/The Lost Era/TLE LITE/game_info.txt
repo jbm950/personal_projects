@@ -1,4 +1,4 @@
-Files
+File
 TLE_LITE_main.py
     top file for the game
 TLE_LITE_graphics.py
@@ -48,4 +48,3 @@ Mage class
     Lightning bolt
         Leveling up increases single target damage 
         chance to stun opponent?
-
