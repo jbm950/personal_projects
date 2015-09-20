@@ -72,9 +72,9 @@ import time
 
 ##webbrowser.register('firefox',None,webbrowser.WinFireFox('firefox'))
 
-##ff = webbrowser.get('seamonkey')
+ff = webbrowser.get('iexplore')
 ####print(ff)
-##ff.open('www.google.com')
-##
-print(webbrowser._tryorder)
+ff.open('www.facebook.com',1)
+
+##print(webbrowser._tryorder)
 print(webbrowser._browsers)
