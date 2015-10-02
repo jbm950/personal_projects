@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  28 SEP 2015 21:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  1 OCT 2015 20:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -111,7 +111,7 @@ LaTeX Font Info:    ... okay on input line 12.
 Here is how much of TeX's memory you used:
  729 strings out of 493089
  10157 string characters out of 6134842
- 68463 words of memory out of 5000000
+ 71463 words of memory out of 5000000
  4278 multiletter control sequences out of 15000+600000
  4245 words of font info for 16 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -119,7 +119,7 @@ Here is how much of TeX's memory you used:
 </usr/local/texlive/2015/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmr12.pfb>
-Output written on nsf_personal_statement.pdf (1 page, 27550 bytes).
+Output written on nsf_personal_statement.pdf (1 page, 31718 bytes).
 PDF statistics:
  16 PDF objects out of 1000 (max. 8388607)
  10 compressed objects within 1 object stream
