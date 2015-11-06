@@ -1,0 +1,6 @@
+goblin,goblin.png,10,3,10,
+hell beast,hell_beast.png,15,5,15,
+hobgoblin,hobgoblin.png,13,4,13,
+skeleton,skeleton.png,20,2,20,
+lich,lich.png,10,10,10,
+zombie,zombie.png,22,2,22,

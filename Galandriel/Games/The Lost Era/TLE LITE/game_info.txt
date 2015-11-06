@@ -1,0 +1,50 @@
+File
+TLE_LITE_main.py
+    top file for the game
+TLE_LITE_graphics.py
+    location of all of the screens and menus
+combat/
+    __init__.py 
+        empty
+    units.py
+        location of the stats and characteristics of each unit
+    classes.py
+        classes for the units (ie. warrior/mage)
+    combat_engine.py
+        handles basic attacks and the targeting of spells
+    skills.py
+        location of abilities and spells
+
+Attributes
+    hp
+    attack bonus
+    
+One unit with two classes
+
+Each class has 4 abilities
+Skills are each a separate class
+Each is callable and has a level up method
+
+Warrior class
+    abilities alter basic attacks and survivability
+        Shield Bash
+            chance to do half damage and stun instead of normal attack
+        Dodge
+            increases chance of dodging enemy attack
+        Improved Crit
+            increases crit chance
+        Accuracy
+            Increases chance of hitting
+
+Mage class
+    abilities are spells
+    spells damage based off mage level not spell level so they can all be used
+
+    Fireball
+        leveling up adds increased aoe chance and chance to cause burning
+        aoe chance increased with every point
+        burning chance increased every other point
+
+    Lightning bolt
+        Leveling up increases single target damage 
+        chance to stun opponent?
