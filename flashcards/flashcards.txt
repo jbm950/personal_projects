@@ -1,0 +1,35 @@
+Flash cards app
+
+Use Tkinter
+
+Make new flashcards/sets
+    Split screen with two text fields for front and back of card
+    Adding cards to a set or starting a new set?
+    Cards are a class
+        attributes for
+            front side text
+            back side text
+            times answered correct
+    Sets are a class
+        containers for each of the four categories of proficiency
+Be able to save/load flashcard sets
+    Use pickle module for saving and loading
+    Use one file per card set so that the sets can be shared
+    Filename = card set name
+    Collections of sets are grouped by folders
+Select sets for practice
+    Be able to select multiple sets
+    Can select a collection and have all cards in that collection get used
+        (equivalent of selecting a folder and having all files underneath
+        selected)
+Flashcards practice screen
+    Have four categories of differing mastery with higher probability of
+        choosing from less known categories
+        - Categories determined by number of times answered correctly
+            - ex. Lowest category = 0 times answered correctly
+                  Mid low category = 1-5 times answered correctly
+                  Mid high category = 6-15 times answered correctly
+                  Highest category = 16+ times answered correctly
+    'Yes, I knew it' and 'No, I didn't know' only answer options
+        - No I didnt know response = subtract 5 from number of times answered
+          correctly with a minimum of 0
