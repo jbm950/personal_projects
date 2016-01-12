@@ -72,7 +72,7 @@ class popupEditWindow(object):
         self.top.destroy()
 
 
-class SampleApp(tk.Tk):
+class MainApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -87,7 +87,7 @@ class SampleApp(tk.Tk):
 
         self.cardset = []
         self.frames = {}
-        for F in (StartPage, EditSetsPage, PageTwo):
+        for F in (StartPage, EditSetsPage, ChooseSetsPage, PageTwo):
             page_name = F.__name__
             frame = F(container, self)
             self.frames[page_name] = frame
@@ -114,8 +114,7 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Flash Cards 4 You", font=TITLE_FONT)
         label.pack(side="top", fill="x", pady=40)
 
-        button1 = tk.Button(self, text="Edit Sets",
-                            command=self.editsets)
+        button1 = tk.Button(self, text="Edit Sets", command=self.editsets)
         button2 = tk.Button(self, text="Practice",
                             command=lambda: controller.show_frame("PageTwo"))
         button1.pack()
@@ -169,13 +168,13 @@ class EditSetsPage(tk.Frame):
 
         front = tk.Label(self, text="Front", font=TITLE_FONT)
         front.place(relx=0.2, rely=0.25, anchor="center")
-        self.fronte = tk.Entry(self, justify="center")
+        self.fronte = tk.Text(self, relief="sunken", bd=1)
         self.fronte.place(relx=0.2, rely=0.5, relheight=0.38, relwidth=0.38,
                           anchor="center")
 
         back = tk.Label(self, text="Back", font=TITLE_FONT)
         back.place(relx=0.6, rely=0.25, anchor="center")
-        self.backe = tk.Entry(self, justify="center")
+        self.backe = tk.Text(self, relief="sunken", bd=1)
         self.backe.place(relx=0.6, rely=0.5, relheight=0.38, relwidth=0.38,
                          anchor="center")
 
@@ -198,8 +197,8 @@ class EditSetsPage(tk.Frame):
         switchcardbutton.place(relx=0.64, rely=0.8, anchor="center")
 
     def checksaved(self):
-        if (self.fronte.get() == self.active_card.frontside and
-           self.backe.get() == self.active_card.backside and
+        if (self.fronte.get("1.0", "end")[:-1] == self.active_card.frontside and
+           self.backe.get("1.0", "end")[:-1] == self.active_card.backside and
            self.cardnamee.get() == self.active_card.cardname):
             pass
         else:
@@ -281,8 +280,8 @@ class EditSetsPage(tk.Frame):
                                            'exists' % self.cardnamee.get())
                     return False
         self.active_card.cardname = self.cardnamee.get()
-        self.active_card.frontside = self.fronte.get()
-        self.active_card.backside = self.backe.get()
+        self.active_card.frontside = self.fronte.get("1.0", "end")[:-1]
+        self.active_card.backside = self.backe.get("1.0", "end")[:-1]
         self.updatefields()
         self.saveset()
 
@@ -326,8 +325,8 @@ class EditSetsPage(tk.Frame):
         self.cardnamee.place(relx=0.45, rely=0.16, anchor="center")
 
         self.cardnamee.insert(0, self.active_card.cardname)
-        self.fronte.insert(0, self.active_card.frontside)
-        self.backe.insert(0, self.active_card.backside)
+        self.fronte.insert("insert", self.active_card.frontside)
+        self.backe.insert("insert", self.active_card.backside)
 
         self.cards = tk.Label(self, text="Cards", font=TITLE_FONT)
         self.cards.place(relx=0.885, rely=0.05, anchor="center")
@@ -345,16 +344,31 @@ class EditSetsPage(tk.Frame):
     def updatefields(self):
         self.cardlist.delete(0, "end")
         self.cardnamee.delete(0, "end")
-        self.fronte.delete(0, "end")
-        self.backe.delete(0, "end")
+        self.fronte.delete("1.0", "end")
+        self.backe.delete("1.0", "end")
 
         self.cardnamee.insert(0, self.active_card.cardname)
-        self.fronte.insert(0, self.active_card.frontside)
-        self.backe.insert(0, self.active_card.backside)
+        self.fronte.insert("insert", self.active_card.frontside)
+        self.backe.insert("insert", self.active_card.backside)
 
         for i in self.cardset.fulllist:
             for j in i:
                 self.cardlist.insert("end", j.cardname)
+
+
+class ChooseSetsPage(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="This is page 2", font=TITLE_FONT)
+        label.pack(side="top", fill="x", pady=10)
+        button = tk.Button(self, text="Go to the start page",
+                           command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+    def update(self):
+        pass
 
 
 class PageTwo(tk.Frame):
@@ -373,6 +387,6 @@ class PageTwo(tk.Frame):
 
 
 if __name__ == "__main__":
-    app = SampleApp()
+    app = MainApp()
     app.geometry('800x600')
     app.mainloop()
