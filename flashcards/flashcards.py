@@ -116,7 +116,8 @@ class StartPage(tk.Frame):
 
         button1 = tk.Button(self, text="Edit Sets", command=self.editsets)
         button2 = tk.Button(self, text="Practice",
-                            command=lambda: controller.show_frame("PageTwo"))
+                            command=lambda:
+                            controller.show_frame("ChooseSetsPage"))
         button1.pack()
         button2.pack()
 
@@ -361,11 +362,61 @@ class ChooseSetsPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is page 2", font=TITLE_FONT)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        label = tk.Label(self, text="Choose the sets for practice",
+                         font=TITLE_FONT)
+        label.place(relx=0.5, rely=0.1, anchor="center")
+
+        addbutton = tk.Button(self, text="Add", command=self.addset)
+        addbutton.place(relx=0.5, rely=0.4, anchor="center")
+
+        removebutton = tk.Button(self, text="Remove", command=self.removeset)
+        removebutton.place(relx=0.5, rely=0.45, anchor="center")
+
+        upfolderbutton = tk.Button(self, text="Up Folder",
+                                   command=self.upfolder)
+        upfolderbutton.place(relx=0.5, rely=0.5, anchor="center")
+
+        downfolderbutton = tk.Button(self, text="Down Folder",
+                                     command=self.downfolder)
+        downfolderbutton.place(relx=0.5, rely=0.55, anchor="center")
+
+        startbutton = tk.Button(self, text="Start", command=self.start)
+        startbutton.place(relx=0.5, rely=0.6, anchor="center")
+
+        backbutton = tk.Button(self, text="Back", command=self.back)
+        backbutton.place(relx=0.5, rely=0.65, anchor="center")
+
+        scrollbar1 = tk.Scrollbar(self, orient="vertical")
+        self.openlist = tk.Listbox(self, yscrollcommand=scrollbar1.set)
+        scrollbar1.config(command=self.openlist.yview)
+        scrollbar1.place(relx=0.36, rely=0.6, relheight=0.7, anchor="center")
+        self.openlist.place(relx=0.2, rely=0.6, relheight=0.7, relwidth=0.3,
+                            anchor="center")
+
+        scrollbar2 = tk.Scrollbar(self, orient="vertical")
+        self.chosenlist = tk.Listbox(self, yscrollcommand=scrollbar2.set)
+        scrollbar2.config(command=self.chosenlist.yview)
+        scrollbar2.place(relx=0.96, rely=0.6, relheight=0.7, anchor="center")
+        self.chosenlist.place(relx=0.8, rely=0.6, relheight=0.7, relwidth=0.3,
+                              anchor="center")
+
+    def addset(self):
+        pass
+
+    def back(self):
+        self.controller.show_frame("StartPage")
+
+    def downfolder(self):
+        pass
+
+    def removeset(self):
+        pass
+
+    def start(self):
+        pass
+
+    def upfolder(self):
+        pass
 
     def update(self):
         pass
@@ -389,4 +440,5 @@ class PageTwo(tk.Frame):
 if __name__ == "__main__":
     app = MainApp()
     app.geometry('800x600')
+    app.title("Flash Cards 4 You")
     app.mainloop()
