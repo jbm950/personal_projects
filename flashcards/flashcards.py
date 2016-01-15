@@ -87,7 +87,7 @@ class MainApp(tk.Tk):
 
         self.cardset = []
         self.frames = {}
-        for F in (StartPage, EditSetsPage, ChooseSetsPage, PageTwo):
+        for F in (StartPage, EditSetsPage, ChooseSetsPage, PracticePage):
             page_name = F.__name__
             frame = F(container, self)
             self.frames[page_name] = frame
@@ -127,7 +127,9 @@ class StartPage(tk.Frame):
         if response is None:
             return
         elif response is True:
-            window = popupEditWindow(self.controller, label="Card Set Name?")
+            window = popupEditWindow(self.controller, label="Card Set "
+                                     "Name?\nWarning do not create cardsets "
+                                     "with the same name")
             self.controller.wait_window(window.top)
             try:
                 filename = window.value
@@ -393,6 +395,10 @@ class ChooseSetsPage(tk.Frame):
         self.openlist.place(relx=0.2, rely=0.6, relheight=0.7, relwidth=0.3,
                             anchor="center")
 
+        openfolder = tk.Label(self, text="Selected Sets", font=("Helvetica",
+                                                                24))
+        openfolder.place(relx=0.8, rely=0.2, anchor="center")
+
         scrollbar2 = tk.Scrollbar(self, orient="vertical")
         self.chosenlist = tk.Listbox(self, yscrollcommand=scrollbar2.set)
         scrollbar2.config(command=self.chosenlist.yview)
@@ -401,28 +407,111 @@ class ChooseSetsPage(tk.Frame):
                               anchor="center")
 
     def addset(self):
-        pass
+        index = self.currentfolder.rfind("savedfcs") + len("savedfcs")
+        loc = self.currentfolder[index:]
+        item = loc + self.openlist.get("active")
+
+        if item in self.chosenlist.get(0, "end"):
+            self.errormessage("item present")
+            return
+        else:
+            self.chosenlist.insert("end", item)
 
     def back(self):
         self.controller.show_frame("StartPage")
 
     def downfolder(self):
-        pass
+        folder = self.openlist.get("active")
+        if os.path.isdir(self.currentfolder + folder):
+            self.currentfolder = self.currentfolder + folder
+        else:
+            self.errormessage("not folder")
+            return
+
+        self.updatelist()
+
+    def errormessage(self, code):
+        if code == "not folder":
+            errmessage = "The selected item is not a folder"
+        elif code == "top folder":
+            errmessage = "Already at the root folder. Please make sure your " \
+                         "files are saved under the savedfcs folder"
+        elif code == "item present":
+            errmessage = "The selected item is already added"
+        elif code == "none selected":
+            errmessage = "No items have been selected"
+
+        messagebox.showwarning(message=errmessage)
 
     def removeset(self):
-        pass
+        self.chosenlist.delete("active")
 
     def start(self):
-        pass
+        items = self.chosenlist.get(0, "end")
+        root = "./savedfcs"
+        if not items:
+            self.errormessage("none selected")
+            return
+
+        for i in items:
+            if os.path.isdir(root + i):
+                for subdir, dirs, files in os.walk(root + i):
+                    for i in files:
+                        if not subdir.endswith(filesep):
+                            subdir += filesep
+                        cardset = pickle.load(open(subdir + i, "rb"))
+                        for i in self.controller.cardset:
+                            if i.name == cardset.name:
+                                break
+                        else:
+                            self.controller.cardset += [cardset]
+            else:
+                cardset = pickle.load(open(savedir + i.lower().replace(" ",
+                                                                       "_"),
+                                           "rb"))
+                for i in self.controller.cardset:
+                    if i.name == cardset.name:
+                        break
+                else:
+                    self.controller.cardset += [cardset]
+
+        self.controller.show_frame("PracticePage")
 
     def upfolder(self):
-        pass
+        if self.currentfolder == savedir:
+            self.errormessage("top folder")
+            return
+        index = self.currentfolder.rstrip(filesep).rindex(filesep)
+        self.currentfolder = self.currentfolder[:index + 1]
+        self.updatelist()
 
     def update(self):
-        pass
+        self.controller.cardset = []
+        self.openlist.delete(0, "end")
+        self.chosenlist.delete(0, "end")
+        self.currentfolder = savedir
+
+        self.updatelist()
+
+    def updatelist(self):
+        self.openlist.delete(0, "end")
+
+        index = self.currentfolder.rstrip(filesep).rindex(filesep)
+        clearing = tk.Label(self, text="                          ",
+                            font=("Helvetica", 24))
+        clearing.place(relx=0.2, rely=0.2, anchor="center")
+        openfolder = tk.Label(self, text=self.currentfolder[index + 1:],
+                              font=("Helvetica", 24))
+        openfolder.place(relx=0.2, rely=0.2, anchor="center")
+
+        for i in os.listdir(self.currentfolder):
+            if os.path.isfile(self.currentfolder + i):
+                self.openlist.insert("end", i.replace("_", " ").title())
+            else:
+                self.openlist.insert("end", i + filesep)
 
 
-class PageTwo(tk.Frame):
+class PracticePage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -434,7 +523,8 @@ class PageTwo(tk.Frame):
         button.pack()
 
     def update(self):
-        pass
+        for i in self.controller.cardset:
+            print(i.name)
 
 
 if __name__ == "__main__":
