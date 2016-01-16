@@ -2,6 +2,7 @@
 
 import os
 import pickle
+import random
 import sys
 import tkinter as tk
 import tkinter.filedialog as fdialog
@@ -460,11 +461,14 @@ class ChooseSetsPage(tk.Frame):
                         if not subdir.endswith(filesep):
                             subdir += filesep
                         cardset = pickle.load(open(subdir + i, "rb"))
-                        for i in self.controller.cardset:
-                            if i.name == cardset.name:
+                        for x in self.controller.cardset:
+                            if x.name == cardset.name:
                                 break
                         else:
                             self.controller.cardset += [cardset]
+                            temp = subdir + i
+                            temp.lower().replace(" ", "_")
+                            self.controller.setpaths += [temp]
             else:
                 cardset = pickle.load(open(savedir + i.lower().replace(" ",
                                                                        "_"),
@@ -474,6 +478,7 @@ class ChooseSetsPage(tk.Frame):
                         break
                 else:
                     self.controller.cardset += [cardset]
+                    self.controller.setpaths += [i.lower().replace(" ", "_")]
 
         self.controller.show_frame("PracticePage")
 
@@ -487,6 +492,7 @@ class ChooseSetsPage(tk.Frame):
 
     def update(self):
         self.controller.cardset = []
+        self.controller.setpaths = []
         self.openlist.delete(0, "end")
         self.chosenlist.delete(0, "end")
         self.currentfolder = savedir
@@ -512,19 +518,136 @@ class ChooseSetsPage(tk.Frame):
 
 
 class PracticePage(tk.Frame):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is page 2", font=TITLE_FONT)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        self.header = tk.Label(self, font=TITLE_FONT)
+        self.header.place(relx=0.5, rely=0.1, anchor="center")
+
+        button = tk.Button(self, text="Exit", command=self.exit)
+        button.place(relx=0.85, rely=0.85, anchor="center")
+
+        self.flipbutton = tk.Button(self, text="Flip", command=self.flip)
+        self.flipbutton.place(relx=0.5, rely=0.85, anchor="center")
+
+        self.correctbutton = tk.Button(self, text="Correct",
+                                       command=self.correct, state="disabled")
+        self.correctbutton.place(relx=0.4, rely=0.9, anchor="center")
+
+        self.incorrectbutton = tk.Button(self, text="Incorrect",
+                                         command=self.incorrect,
+                                         state="disabled")
+        self.incorrectbutton.place(relx=0.6, rely=0.9, anchor="center")
+
+        background = tk.Text(self, relief="sunken", bd=1, state="disabled")
+        background.place(relx=0.5, rely=0.5, relheight=0.6, relwidth=0.7,
+                         anchor="center")
+        self.card = tk.Text(self)
+        self.card.place(relx=0.5, rely=0.5, relheight=0.45, relwidth=0.5,
+                        anchor="center")
+
+    def correct(self):
+        prev = self.chosencard.timescorrect
+        self.chosencard.timescorrect += 1
+
+        if prev == 15:
+            self.chosenset.cat3.remove(self.chosencard)
+            self.chosenset.cat4.append(self.chosencard)
+        elif prev == 5:
+            self.chosenset.cat2.remove(self.chosencard)
+            self.chosenset.cat3.append(self.chosencard)
+        elif prev == 0:
+            self.chosenset.cat1.remove(self.chosencard)
+            self.chosenset.cat2.append(self.chosencard)
+
+        self.save()
+        self.draw()
+
+    def draw(self):
+        categories = []
+        for i in self.controller.cardset:
+            if i.cat1 and 1 not in categories:
+                for x in range(4):
+                    categories.append(1)
+            if i.cat2 and 2 not in categories:
+                for x in range(3):
+                    categories.append(2)
+            if i.cat3 and 3 not in categories:
+                for x in range(2):
+                    categories.append(3)
+            if i.cat4 and 4 not in categories:
+                categories.append(4)
+
+        choosecat = random.choice(categories)
+
+        while True:
+            chosenset = self.chosenset = random.choice(self.controller.cardset)
+            try:
+                if choosecat == 1:
+                    self.chosencard = random.choice(chosenset.cat1)
+                elif choosecat == 2:
+                    self.chosencard = random.choice(chosenset.cat2)
+                elif choosecat == 3:
+                    self.chosencard = random.choice(chosenset.cat3)
+                elif choosecat == 4:
+                    self.chosencard = random.choice(chosenset.cat4)
+
+                break
+
+            except IndexError:
+                continue
+
+        self.header.config(text=chosenset.name)
+
+        self.card.config(state="normal")
+        self.card.delete(1.0, "end")
+        self.card.insert(1.0, self.chosencard.frontside)
+        self.card.config(state="disabled")
+
+        self.flipbutton.config(state="normal")
+        self.correctbutton.config(state="disabled")
+        self.incorrectbutton.config(state="disabled")
+
+    def exit(self):
+        self.controller.show_frame("StartPage")
+
+    def flip(self):
+        self.card.config(state="normal")
+        self.card.delete(1.0, "end")
+        self.card.insert(1.0, self.chosencard.backside)
+        self.card.config(state="disabled")
+
+        self.flipbutton.config(state="disabled")
+        self.correctbutton.config(state="normal")
+        self.incorrectbutton.config(state="normal")
+
+    def incorrect(self):
+        if self.chosencard.timescorrect > 15:
+            self.chosenset.cat4.remove(self.chosencard)
+            self.chosenset.cat3.append(self.chosencard)
+            self.chosencard.timescorrect = 6
+        elif self.chosencard.timescorrect > 5:
+            self.chosenset.cat3.remove(self.chosencard)
+            self.chosenset.cat2.append(self.chosencard)
+            self.chosencard.timescorrect = 1
+        elif self.chosencard.timescorrect > 1:
+            self.chosenset.cat2.remove(self.chosencard)
+            self.chosenset.cat1.append(self.chosencard)
+            self.chosencard.timescorrect = 0
+
+        self.save()
+        self.draw()
+
+    def save(self):
+        temp = self.chosenset.name.lower().replace(" ", "_")
+        for i in self.controller.setpaths:
+            if temp in i:
+                with open(i, "wb+") as f:
+                    pickle.dump(self.chosenset, f)
+                break
 
     def update(self):
-        for i in self.controller.cardset:
-            print(i.name)
+        self.draw()
 
 
 if __name__ == "__main__":
